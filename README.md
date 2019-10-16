@@ -12,10 +12,10 @@ Decision Tree
 - **a. What is information gain**    
 
   We define entropy H(X) as a matrix to reflect the uncertainty of a random variable. 
-Suppose that a random variable X follows the below dirtribution:  
+  Suppose that a random variable X follows the below dirtribution:  
 
   ![img](https://latex.codecogs.com/svg.latex?%5Cbg_black%20P%28X%3Dx%29%3Dp_%7Bi%7D%2C%20i%20%3D%201%2C2%2C3%2C...%2Cn)  
-Then the entropy of X is as below:  
+  Then the entropy of X is as below:  
 
   ![img](https://latex.codecogs.com/svg.latex?%5Cbg_black%20%24H%28X%29%20%3D%20-%5Csum_%7Bi%20%3D%201%7D%5E%7Bn%7Dp_%7Bi%7D%5Clog%28p_%7Bi%7D%29%24)  
 So the information gain g(D, A) of dataset D given feature A is as below:
@@ -56,7 +56,7 @@ Model Output: ID3 decision tree.
 
   The information gain ratio gr(D, A) of dataset D given feature A is as below:  
   <img src="http://www.sciweavers.org/tex2img.php?eq=g_r%28D%2C%20A%29%20%3D%20%5Cfrac%7Bg%28D%2C%20A%29%7D%7BH%28D%29%7D&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="g_r(D, A) = \frac{g(D, A)}{H(D)}" width="150" height="46" />  
-  The entropy of dataset D is the same as discussed in ID3:
+  The entropy of dataset D is the same as discussed in ID3:  
   ![img](https://latex.codecogs.com/svg.latex?%5Cbg_black%20H%28D%29%20%3D%20-%5Csum_%7Bk%3D1%7D%5E%7BK%7D%7B%5Cfrac%7B%7CC_%7Bk%7D%7C%7D%7B%7CD%7C%7D%7D%5Clog_%7B%20%7D%5Cfrac%7B%7CC_%7Bk%7D%7C%7D%7B%7CD%7C%7D)  
 
 - **b. How to compute information gain ratio**  
@@ -70,5 +70,5 @@ Suppose that Dik denotes the subset of the sample of category k in subset Di.
     2. **compute H(D|A) of dataset D given condition A**  
     suppose givne condition A, we split the area into D1, D2, ..., Dn, totally n parts. Then the H(D|A) is as below:  
     ![img](https://latex.codecogs.com/svg.latex?%5Cbg_black%20H%28D%7CA%29%20%3D%20%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%20%5Cfrac%7B%7CD_i%7C%7D%7B%7CD%7C%7DH%28D_%7Bi%7D%29%20%3D%20%5Csum_%7Bi%3D1%7D%5E%7Bn%7D%20%5Cfrac%7B%7CD_i%7C%7D%7B%7CD%7C%7D%20%5Csum_%7Bk%3D1%7D%5E%7BK%7D%20%5Cfrac%7B%7CD_%7Bik%7D%7C%7D%7B%7CD_i%7C%7D%5Clog%28%5Cfrac%7B%7CD_%7Bik%7D%7C%7D%7B%7CD_i%7C%7D%29)  
-    3. **compute information gain ratio gr(D, A) given condition A**
+    3. **compute information gain ratio gr(D, A) given condition A**  
     <img src="http://www.sciweavers.org/tex2img.php?eq=g_r%28D%2C%20A%29%20%3D%20%5Cfrac%7Bg%28D%2C%20A%29%7D%7BH%28D%29%7D%20%3D%20%5Cfrac%7BH%28D%29%20-%20H%28D%7CA%29%7D%7BH%28D%29%7D&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="g_r(D, A) = \frac{g(D, A)}{H(D)} = \frac{H(D) - H(D|A)}{H(D)}" width="293" height="46" />
