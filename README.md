@@ -114,7 +114,7 @@ So the Gini index of dataset given split on feature A is as below:
 During each split, we find the feature that gives the dataset the minimum Gini index after the split.  
 
   Model Input: dataset D, feature set A, stopping threshold e.  
-  Model Output: ID3 decision tree.  
+  Model Output: CART decision tree.  
  
   **Recurrent Algorithm for Classification Tree**:  (very similar to ID3/C4.5)  
   (1) If all the samples in D already only belongs one class Ck, stop splitting at this node, set this final node to be class Ck.  
