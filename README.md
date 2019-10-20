@@ -156,11 +156,11 @@ Boosted Decision Tree
 ------------
 **1. Adaptive Boosting (AdaBoost)**
 > One Sentence Summary:   
-Continously adding weak base learnings to the existing model and adaptively adjusting the weight for weak base learnings.
+Continuously adding weak base learnings to the existing model and adaptively adjusting the weight for weak base learnings.
 
 - **a. What is Forward Stagewise Additive Modeling**  
-Suppose b(x;rm) is a base learning controled by parameter rm.  
-Beta_m is the parameter controled how each weak base learner is added.  
+Suppose b(x;rm) is a base learning controlled by parameter rm.  
+Beta_m is the parameter controlled by how each weak base learner is added.  
 Then the final model f(x) based on M weak base learners will be as below:  
  ![img](https://latex.codecogs.com/svg.latex?f%28x%29%20%3D%20%5Csum_%7Bm%3D1%7D%5E%7BM%7D%20%5Cbeta_%7Bm%7D%20*%20b%28x%3Br_m%29)  
 
@@ -205,3 +205,41 @@ Suppose y belongs to {-1,1}, then the exponential loss function is as below:
   ![img](https://latex.codecogs.com/svg.latex?sign%28f%28x%29%29%20%3D%20sign%28%5Cfrac%7B1%7D%7B2%7D%20*%20log%5Cfrac%7B%5Cmathbb%7BP%7D%28y%3D1%7Cx%29%7D%7B%5Cmathbb%7BP%7D%28y%3D-1%7Cx%29%7D%29%20%3D%20%5Cleft%5C%7B%5Cbegin%7Bmatrix%7D%201%5C%2C%20%5C%2C%20%5C%2C%5C%2C%20%5C%2C%20%5C%2C%20%5C%2C%20%5Cmathbb%7BP%7D%28y%3D1%7Cx%29%20%3E%20%5Cmathbb%7BP%7D%28y%3D-1%7Cx%29%5C%5C%20-1%5C%2C%20%5C%2C%20%5C%2C%20%5C%2C%20%5C%2C%20%5C%2C%20%5Cmathbb%7BP%7D%28y%3D1%7Cx%29%20%3C%20%5Cmathbb%7BP%7D%28y%3D-1%7Cx%29%20%5Cend%7Bmatrix%7D%5Cright.)  
 
   ![img](https://latex.codecogs.com/svg.latex?%5Cleft%5C%7B%5Cbegin%7Bmatrix%7D%201%5C%2C%20%5C%2C%20%5C%2C%5C%2C%20%5C%2C%20%5C%2C%20%5C%2C%20%5Cmathbb%7BP%7D%28y%3D1%7Cx%29%20%3E%20%5Cmathbb%7BP%7D%28y%3D-1%7Cx%29%5C%5C%20-1%5C%2C%20%5C%2C%20%5C%2C%20%5C%2C%20%5C%2C%20%5C%2C%20%5Cmathbb%7BP%7D%28y%3D1%7Cx%29%20%3C%20%5Cmathbb%7BP%7D%28y%3D-1%7Cx%29%20%5Cend%7Bmatrix%7D%5Cright.%20%3D%20%5Cunderset%7By%5Cin%20%5C%7B%201%2C-1%20%5C%7D%7D%7Bargmax%7D%20%5Cmathbb%7BP%7D%28y%7Cx%29)  
+
+- **c. Math behind AdaBoost- how to compute the optimal parameters**  
+Suppose that now we have finished m-1 iterations and successfully computed the f_{m-1} as below:  
+
+  ![img](https://latex.codecogs.com/svg.latex?f_%7Bm-1%7D%28x%29%20%3D%20f_%7Bm-2%7D%28x%29%20&plus;%20%5Cbeta_%7Bm-1%7D%20*%20b%28x%3Br_m%29%20&plus;%20...%20&plus;%20%5Cbeta_%7B1%7D%20*%20b%28x%3Br_1%29%3D%20%5Csum_%7Bi%3D1%7D%5E%7Bm%7D%5Cbeta_%7Bi%7D%20*%20b%28x%3Br_i%29)  
+
+  Now we are at iteration m, and we want to find the optimal beta_m and b_m(x, r_m) (simplified as b_m(x)) to minimize our exponential loss.  Our target is as below:  
+
+  ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26%28%5Cbeta_%7Bm%7D%2C%20b_m%28x%29%29%20%3D%20%5Cunderset%7B%5Cbeta%20%2C%20b%28x%29%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20Loss%28y_i%2C%20f_%7Bm-1%7D%20&plus;%20%5Cbeta%20*%20b%28x_i%29%29%5C%5C%20%26%28%5Cbeta_%7Bm%7D%2C%20b_m%28x%29%29%20%3D%20%5Cunderset%7B%5Cbeta%20%2C%20b%28x%29%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20exp%28-y_i%20*%20f_%7Bm-1%7D%20-%20y_i%20*%20%5Cbeta%20*%20b%28x_i%29%20%29%5C%5C%20%26%28%5Cbeta_%7Bm%7D%2C%20b_m%28x%29%29%20%3D%20%5Cunderset%7B%5Cbeta%20%2C%20b%28x%29%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%20y_i%20*%20%5Cbeta%20*%20b%28x_i%29%20%29%20%5Cend%7Balign*%7D) 
+
+  Where  
+
+  ![img](https://latex.codecogs.com/svg.latex?%5Cbar%7Bw_%7Bmi%7D%7D%20%3D%20exp%28-y_i%20*%20f_%7Bm-1%7D%28x_i%29%29)  
+- compute the optiaml b_m(x)  
+  ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26%20%5Cunderset%7Bb%28x%29%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%20y_i%20*%20%5Cbeta%20*%20b%28x_i%29%20%5C%5C%20%26%5CRightarrow%20%5Cunderset%7Bb%28x%29%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%20y_i%20*%20b%28x_i%29%29%5C%5C%20%26%5CRightarrow%20%5Cunderset%7Bb%28x%29%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29%20-%5Cmathbb%7BI%7D%28y_i%20%3D%20b%28x_i%29%20%29%29%5C%5C%20%26%5CRightarrow%20%5Cunderset%7Bb%28x%29%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29%20-%20%281%20-%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29%29%20%29%20%5C%5C%20%26%5CRightarrow%20%5Cunderset%7Bb%28x%29%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%282*%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%20%29%29%20%5C%5C%20%26%5CRightarrow%20b_m%28x%29%20%3D%20%5Cunderset%7Bb%28x%29%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29%20%29%20%5Cend%7Balign*%7D)  
+
+- compute the optiaml beta_m(x)  
+  ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26%5Cunderset%7B%5Cbeta%20%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%20y_i%20*%20%5Cbeta%20*%20b%28x_i%29%29%20%5C%5C%20%26%5CRightarrow%20%5Cunderset%7B%5Cbeta%20%7D%7Bargmin%7D%20%28%5Csum_%7By%3Db%28x_i%29%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%5Cbeta%20%29%20&plus;%20%5Csum_%7By%5Cnot%5Cequiv%20b%28x_i%29%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28%5Cbeta%20%29%29%20%5C%5C%20%26%5CRightarrow%20%5Cunderset%7B%5Cbeta%20%7D%7Bargmin%7D%20%28%5Csum_%7Bn%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28%5Cbeta%20%29%20*%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29&plus;%20%5Csum_%7Bn%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%5Cbeta%20%29%20*%20%5Cmathbb%7BI%7D%28y_i%20%3D%20b%28x_i%29%29%29%20%5C%5C%20%26%5CRightarrow%20%5Cunderset%7B%5Cbeta%20%7D%7Bargmin%7D%20%28%5Csum_%7Bn%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28%5Cbeta%20%29%20*%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29&plus;%20%5Csum_%7Bn%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%5Cbeta%20%29%20*%20%281%20-%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29%20%29%29%20%5C%5C%20%26%5CRightarrow%20%5Cunderset%7B%5Cbeta%20%7D%7Bargmin%7D%20%28%28exp%28%5Cbeta%29%20-%20exp%28-%5Cbeta%20%29%29%5Csum_%7Bn%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29&plus;%20%5Csum_%7Bn%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%5Cbeta%20%29%29%20%5Cend%7Balign*%7D)  
+
+  So in order to find the optimal beta, we need set the derivative to 0:    
+  ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26%20%5Cunderset%7B%5Cbeta%20%7D%7Bargmin%7D%20%28%28exp%28%5Cbeta%29%20-%20exp%28-%5Cbeta%20%29%29%5Csum_%7Bn%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29&plus;%20%5Csum_%7Bn%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%5Cbeta%20%29%29%5C%5C%20%26%20%5CRightarrow%20%5Cfrac%7B%5Cpartial%20%28%28exp%28%5Cbeta%29%20-%20exp%28-%5Cbeta%20%29%29%5Csum_%7Bn%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29&plus;%20%5Csum_%7Bn%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%5Cbeta%20%29%29%7D%7B%5Cpartial%20%7B%5Cbeta%20%7D%7D%20%3D%200%5C%5C%20%26%20%5CRightarrow%20%28exp%28%5Cbeta%29%20&plus;%20exp%28-%5Cbeta%20%29%29%20*%20%5Csum_%7Bn%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29%20-%20exp%28-%5Cbeta%20%29%20*%20%5Csum_%7Bn%3D1%7D%5E%7BN%7D%5Cbar%7Bw_%7Bmi%7D%7D%3D%200%5C%5C%20%26%20%5CRightarrow%20%5Cfrac%7Bexp%28-%5Cbeta%29%7D%7Bexp%28%5Cbeta%29%20&plus;%20exp%28-%5Cbeta%20%29%7D%20%3D%20%5Cfrac%7B%5Csum_%7Bn%3D1%7D%5E%7BN%7D%5Cbar%7Bw_%7Bmi%7D%7D%20*%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29%7D%7B%5Csum_%7Bn%3D1%7D%5E%7BN%7D%5Cbar%7Bw_%7Bmi%7D%7D%7D%20%5Cend%7Balign*%7D) 
+
+  If we set the right hand side of the last equation to be e_m, then we will have:  
+  
+  ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26%20%5Cfrac%7Bexp%28-%5Cbeta%29%7D%7Bexp%28%5Cbeta%29%20&plus;%20exp%28-%5Cbeta%20%29%7D%20%3D%20%5Cfrac%7B%5Csum_%7Bn%3D1%7D%5E%7BN%7D%5Cbar%7Bw_%7Bmi%7D%7D%20*%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29%7D%7B%5Csum_%7Bn%3D1%7D%5E%7BN%7D%5Cbar%7Bw_%7Bmi%7D%7D%7D%20%3D%20e_m%5C%5C%20%26%20%5CRightarrow%20%5Cfrac%7Bexp%28%5Cbeta%29%20&plus;%20exp%28-%5Cbeta%20%29%7D%20%7Bexp%28-%5Cbeta%29%7D%20%3D%20%5Cfrac%7B1%7D%7Be_m%7D%5C%5C%20%26%20%5CRightarrow%20exp%282*%5Cbeta%20%29%20&plus;%201%20%3D%20%5Cfrac%7B1%7D%7Be_m%7D%5C%5C%20%26%20%5CRightarrow%20exp%282*%5Cbeta%20%29%20%3D%20%5Cfrac%7B1%20-%20e_m%7D%7Be_m%7D%5C%5C%20%26%20%5CRightarrow%20%5Cbeta%20%3D%20%5Cfrac%7B1%7D%7B2%7D%20*%20ln%28%5Cfrac%7B1-e_m%7D%7Be_m%7D%29%5C%5C%20%26%20%5CRightarrow%20%5Cbeta_m%20%3D%20%5Cfrac%7B1%7D%7B2%7D%20*%20ln%28%5Cfrac%7B1-e_m%7D%7Be_m%7D%29%20%5Cend%7Balign*%7D)  
+
+- update the optiaml w_{m+1, i}(x)  
+
+  ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26%20%5Cbar%7Bw_%7Bm&plus;1%2C%20i%7D%7D%20%3D%20exp%28-y_i%20*%20f_m%28x_i%29%29%5C%5C%20%26%20%5CRightarrow%20%5Cbar%7Bw_%7Bm&plus;1%2C%20i%7D%7D%20%3D%20exp%28-y_i%20*%20f_%7Bm&plus;1%7D%28x%29%20-%20y_i%20*%20%5Cbeta_m%20*%20b_m%28x%29%29%5C%5C%20%26%20%5CRightarrow%20%5Cbar%7Bw_%7Bm&plus;1%2C%20i%7D%7D%20%3D%20exp%28-%20y_i%20*%20%5Cbeta_m%20*%20b_m%28x%29%29%20*%20%5Cbar%7Bw_%7Bm%2C%20i%7D%7D%20%5Cend%7Balign*%7D)  
+
+  But we want to normalize this term to make w_{m, i}(x) into "probability":  
+
+  ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26%20Z_m%20%3D%20%5Csum_%7Bn%20%3D%201%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bm%2C%20i%7D%7D%20*%20exp%28-%5Cbeta_m%20*%20y_i%20*%20b_m%28x_i%29%29%5C%5C%20%26%20%5CRightarrow%20%5Cbar%7Bw_%7Bm&plus;1%2C%20i%7D%7D%20%3D%20%5Cfrac%7B%20exp%28-%20y_i%20*%20%5Cbeta_m%20*%20b_m%28x%29%29%20*%20%5Cbar%7Bw_%7Bm%2C%20i%7D%7D%20%7D%7BZ_m%7D%20%5Cend%7Balign*%7D) 
+
+- **d. Actual Recurrent Algorithm for AdaBoost Tree** 
+
+
+  
