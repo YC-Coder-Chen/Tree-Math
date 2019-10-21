@@ -255,6 +255,7 @@ Suppose that now we have finished m-1 iterations and successfully computed the f
 *Model Output*: Final classifier: G(x)  
 
   *Steps*:  
+  
   (1) Initialize the weight T1:  
   ![img](https://latex.codecogs.com/svg.latex?T1%20%3D%20%28w_%7B11%7D%2C%20w_%7B12%7D%2C%20w_%7B13%7D%2C%20...%20%2C%20w_%7B1N%7D%29%2C%20%5C%2C%20%5C%2C%20%5C%2C%20%5C%2C%20w_%7B1%2Ci%7D%20%3D%20%5Cfrac%7B1%7D%7BN%7D%2C%20%5C%2C%20%5C%2C%20%5C%2C%20%5C%2C%20i%3D1%2C2%2C3%2C4%2C...%2CN)  
 
