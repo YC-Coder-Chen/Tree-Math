@@ -13,5 +13,5 @@ Decision Tree
 Boosted Decision Tree
 ------------
 [**1. Adaptive Boosting (AdaBoost)**](./AdaBoost.md)  
-**2. GBM (Gradient Boostting Machine)**
+**2. GBM (Gradient Boosting Machine)**
 
