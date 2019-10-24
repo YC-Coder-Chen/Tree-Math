@@ -365,7 +365,7 @@ AdaBoost uses exponential loss and the exponential loss grows exponentially for 
   (2) for m in 1,2,3,..., M:  
 
   - compute the negative gradient:  
-  ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26%5Ctilde%7By_i%7D%5E%7Bm%7D%20%3D%20-%20%5Cfrac%7B%5Cpartial%20Loss%28y_i%2C%20f_%7Bm-1%7D%28x_i%29%29%20%7D%7B%5Cpartial%20%7Bf_%7Bm-1%7D%28x%29%7D%7D%20%5C%5C%20%26%3D%20-%20%5Cfrac%7B%5Cpartial%20%5By_i%20-%20f_%7Bm-1%7D%28x_i%29%5D%5E2%20%7D%7B%5Cpartial%20%7Bf_%7Bm-1%7D%28x%29%7D%7D%20%5C%5C%20%26%3D%20y_i%20-%20f_%7Bm-1%7D%28x%29%20%5Cend%7Balign*%7D)  
+  ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26%5Ctilde%7By_i%7D%5E%7Bm%7D%20%3D%20-%20%5Cfrac%7B%5Cpartial%20Loss%28y_i%2C%20f_%7Bm-1%7D%28x_i%29%29%20%7D%7B%5Cpartial%20%7Bf_%7Bm-1%7D%28x%29%7D%7D%20%5C%5C%20%26%3D%20-%20%5Cfrac%7B%5Cpartial%20%5By_i%20-%20f_%7Bm-1%7D%28x_i%29%5D%5E2%20%7D%7B%5Cpartial%20%7Bf_%7Bm-1%7D%28x%29%7D%7D%20%5C%5C%20%26%3D%20y_i%20-%20f_%7Bm-1%7D%28x_i%29%20%5Cend%7Balign*%7D)  
 
   - Fit a new CART tree by minimizing the square loss, suppose that the CART decision tree split the area into J different parts R_{j,m}:  
   ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26b_m%28x%29%20%3D%20%5Cunderset%7Bb%28x%29%20%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5B%5Ctilde%7By_i%7D%20-%20b%28x%29%5D%5E2%5C%5C%20%26%5CRightarrow%20%5C%7BR_%7Bj%2Cm%7D%5C%7D%20%3D%20%5Cunderset%7B%5C%7BR_%7Bj%2Cm%7D%5C%7D%20%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5B%5Ctilde%7By_i%7D%20-%20b_m%28x_i%2C%20%5C%7BR_%7Bj%2Cm%7D%5C%7D%29%5D%5E2%20%5Cend%7Balign*%7D)  
@@ -386,6 +386,31 @@ AdaBoost uses exponential loss and the exponential loss grows exponentially for 
   *Model Input*:  Dataset D: D = {(x1,y1), ..., (x_N, y_N), y_i belongs to {-1,1}}  
   *Model Output*: Final classifier: f_m(x)  
   *Loss Function*: Deviance Loss
+
+  *Steps*:  
+  
+  (1) Initialization:  
+
+  What is the loss function (deviance loss function):  
+
+  ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26z_i%5Em%20%3D%20f_m%28x_i%29%20%3D%20f_%7Bm-1%7D%28x_i%29%20&plus;%20b_m%28x_i%29%20%5C%5C%20%26p_i%5Em%20%3D%20%5Cfrac%7B1%7D%7B1%20&plus;%20exp%28-z_i%5Em%29%7D%20%5C%5C%20%26%5CRightarrow%20Loss%28p%5Em%2C%20y%29%20%3D%20-%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%28y_i%20*%20log%28p_i%5Em%29%20&plus;%20%281-y_i%29%20*%20log%281-p_i%5Em%29%29%20%5Cend%7Balign*%7D)  
+
+  So each time, we are using sigmoid(fm(x)) to proximate the probability. 
+
+  Suppose now we are at time 0, and we want a constant f0(x) to minimize our loss function during the initialization.  
+
+  ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26%5Cunderset%7Bf_0%20%7D%7Bargmin%7D%20%5C%2C%20%5C%2C%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20Loss%28p_i%5E0%2C%20y_i%29%20%5C%5C%20%26%5CRightarrow%20%5Cunderset%7Bf_0%20%7D%7Bargmin%7D%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20Loss%28%5Cfrac%7B1%7D%7B1&plus;exp%28-f_0%28x_i%29%29%7D%20%2C%20y_i%29%20%5Cend%7Balign*%7D)  
+
+  We find this f0 by setting the derivative to be 0:  
+
+  ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26%5Cunderset%7Bf_0%20%7D%7Bargmin%7D%20%5C%2C%20%5C%2C%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20Loss%28p_i%5E0%2C%20y_i%29%20%5C%5C%20%26%5CRightarrow%20%5Cfrac%7B%5Cpartial%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20Loss%28p_i%5E0%2C%20y_i%29%20%7D%7B%5Cpartial%20%7Bf_%7B0%7D%28x%29%7D%7D%20%3D%200%20%5C%5C%20%26%5CRightarrow%20%5Cfrac%7B%5Cpartial%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20Loss%28p_i%5E0%2C%20y_i%29%20%7D%7B%5Cpartial%20%7Bf_%7B0%7D%28x%29%7D%7D%20%3D%20%5Cfrac%7B%5Cpartial%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20Loss%28p_i%5E0%2C%20y_i%29%20%7D%7B%5Cpartial%20%7Bp%5E0%7D%7D%20%5C%2C%20%5C%2C%20%5Cfrac%7B%5Cpartial%20%7Bp%5E0%7D%7D%7B%5Cpartial%20%7Bf_0%28x%29%7D%7D%20%3D%200%20%5C%5C%20%26%5CRightarrow%20-%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%28%5Cfrac%7By_i%7D%7Bp%5E0%7D%20-%20%5Cfrac%7B1-y_i%7D%7B1-p%5E0%7D%29%20*%20%28p%5E0%281-p%5E0%29%29%3D%200%20%5C%5C%20%26%5CRightarrow%20-%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5B%281-p%5E0%29%20*%20y_i%20-%20p%5E0%20*%20%281-y_i%29%5D%3D%200%20%5C%5C%20%26%5CRightarrow%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%28p%5E0%20-%20y_i%29%3D%200%20%5C%5C%20%26%5CRightarrow%20p%5E0%20%3D%20%5Cfrac%7B%5Csum_%7Bi%3D1%7D%5E%7BN%7D%7D%7Bm%7D%20%5Cend%7Balign*%7D)  
+
+  So after computing p0, we can compute the constant f0(x):  
+
+  ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26p%5E0%20%3D%20%5Cfrac%7B%5Csum_%7Bi%3D1%7D%5E%7BN%7D%7D%7Bm%7D%20%5C%5C%20%26%5CRightarrow%20%5Cfrac%7B1%7D%7B1&plus;exp%28-f_0%28x%29%29%7D%20%3D%20%5Cfrac%7B%5Csum_%7Bi%3D1%7D%5E%7BN%7D%7D%7Bm%7D%20%5C%5C%20%26%5CRightarrow%201&plus;exp%28-f_0%28x%29%29%20%3D%20%5Cfrac%7Bm%7D%7B%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20y_i%20%7D%20%5C%5C%20%26%5CRightarrow%20exp%28-f_0%28x%29%29%20%3D%20%5Cfrac%7Bm-%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20y_i%7D%7B%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20y_i%20%7D%20%5C%5C%20%26%5CRightarrow%20exp%28f_0%28x%29%29%20%3D%20%5Cfrac%7B%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20y_i%20%7D%7Bm-%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20y_i%7D%20%5C%5C%20%26%5CRightarrow%20f_o%28x%29%20%3D%20log%28%5Cfrac%7B%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20y_i%20%7D%7Bm-%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20y_i%7D%29%20%5Cend%7Balign*%7D)  
+
+   (2) for m in 1,2,3,..., M:  
+   
 
 
 
