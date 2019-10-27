@@ -6,7 +6,7 @@ My study notes, contains Math behind all the mainstream tree-based machine learn
 
 Boosted Decision Tree
 ------------
-**2. GBM (Gradient Boosting Machine)**
+**GBM (Gradient Boosting Machine)**
 
 > One Sentence Summary:   
 Continuously adding weak base learners to approximate the negative gradient so as to decrease total loss.  

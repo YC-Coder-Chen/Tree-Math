@@ -6,7 +6,7 @@ My study notes, contains Math behind all the mainstream tree-based machine learn
 
 Boosted Decision Tree
 ------------
-**1. Adaptive Boosting (AdaBoost)**
+**Adaptive Boosting (AdaBoost)**
 > One Sentence Summary:   
 Continuously adding weak base learners to the existing model and adaptively adjusting the weight for weak base learnings.
 

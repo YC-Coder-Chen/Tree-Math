@@ -6,7 +6,7 @@ My study notes, contains Math behind all the mainstream tree-based machine learn
 
 Decision Tree
 ------------
-**1. ID3 Model**
+**ID3 Model**
 > One Sentence Summary:   
 Using the information gain matrix to find the features in each split.
 
