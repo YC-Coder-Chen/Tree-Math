@@ -48,6 +48,7 @@ AdaBoost uses exponential loss and the exponential loss grows exponentially for 
   ![img](https://latex.codecogs.com/svg.latex?b_m%28x%29%20%3D%20%5Cunderset%7Bb%28x%29%20%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5B%5Ctilde%7By_i%7D%20-%20b%28x%29%5D%5E2)  
 
   - Use linear search to find the best step (very similar to the learning rate concept in SGD):  
+
   ![img](https://latex.codecogs.com/svg.latex?%5Ceta_m%20%3D%20%5Cunderset%7B%20%5Ceta%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20Loss%28y_i%2C%20f_%7Bm-1%7D%28x_i%29%20&plus;%20%5Ceta%20*%20b_m%28x_i%29%29)  
 
   - update the function f_m(x):  

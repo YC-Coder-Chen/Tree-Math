@@ -148,4 +148,4 @@ Suppose that now we have finished m-1 iterations and successfully computed the f
 
   ![img](https://latex.codecogs.com/svg.latex?%5Cleft%5C%7B%5Cbegin%7Bmatrix%7D%20w_%7Bm&plus;1%2Ci%7D%20%3D%20w_m%20*%20exp%28-%5Cbeta_m%29%2C%20%5C%2C%20%5C%2C%20%5C%2C%20%5C%2C%20y_i%3Db_m%28x_i%29%20%5C%5C%20w_%7Bm&plus;1%2Ci%7D%20%3D%20w_m%20*%20exp%28%5Cbeta_m%29%2C%20%5C%2C%20%5C%2C%20%5C%2C%20%5C%2C%20y_i%20%5Cneq%20b_m%28x_i%29%20%5Cend%7Bmatrix%7D%5Cright.)  
 
-  which means that, if the classification is correct, then the weight will decrease, but if the classification is wrong, then the weight will increase.  
+  which means that, if the classification is correct, then the weight of that sample will decrease, but if the classification is wrong, then the weight of that sample will increase.  
