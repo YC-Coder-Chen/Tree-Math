@@ -14,7 +14,7 @@ Continuously adding weak base learners to approximate the negative gradient so a
 - **a. Difference between AdaBoost & GBM**  
 AdaBoost uses exponential loss and the exponential loss grows exponentially for negative values which makes it more sensitive to outliers. But GBM allows for using more robust loss functions as long as the loss function is continuously differentiable.  
 
-  | Models      | Methods to correct previous errors    |
+  | Models      | Methods to correct previous errors   |
   | ---------- | :-----------:  |
   | AdaBoost     | Adding the weights for incorrectly classified samples, decreasing the weights for correctly classified samples.     | 
   | GBM     | Using the negative gradient as the indicator of the error that previous base learners made, fitting the next base learner to approximate the negative gradient of the previous base learners.  |  
