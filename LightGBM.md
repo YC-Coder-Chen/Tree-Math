@@ -170,7 +170,7 @@ The most important difference is that GBM needs to go through every possible fea
   | 1.0 | 2.0 | NOT |
   | 3.0 | 7.0 | NOT |
   | 0.0 | 11.0 | NOT |
-  | 0.0 | 0.0 | NOT |   
+  | 0.0 | 0.0 | YES |   
 
   Recall that one-hot encoding usually generates a large number of sparse features, so this EFB technique can be quite useful in practice.  
 
