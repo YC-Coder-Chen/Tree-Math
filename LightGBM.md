@@ -16,7 +16,7 @@ The most important difference is that GBM needs to go through every possible fea
 
   | XGboost   | LightGBM  |
   | :-------------: | :-------------: |
-  | Use Exact Greedy Algorithm/Approximate Algorithm using Weighted Quantile Sketch to find the best split | Uses Histogram Algorithm/Gradient-based One-Side Sampling/Exclusive Feature Bundlin  |
+  | Use Exact Greedy Algorithm/Approximate Algorithm using Weighted Quantile Sketch to find the best split | Uses Histogram Algorithm/Gradient-based One-Side Sampling/Exclusive Feature Bundling  |
   |  Level-wise tree growing strategy | Leaf-wise tree growing strategy  |
   |  Only feature parallel| Support feature parallel/data parallel/Voting parallel  |
   |  No direct support for categorical features| Directly support categorical features |
@@ -82,9 +82,82 @@ The most important difference is that GBM needs to go through every possible fea
 
     - Reduce communication cost for parallel learning  
 
-- **c. what is GOSS(Gradient-based One-Side Sampling)**  
-  Besides Histogram Algorithm, lightGBM also proposes GOSS method to better reduce RAM usage and save computing time.  
+- **c. What is GOSS(Gradient-based One-Side Sampling)**  
+  Besides Histogram Algorithm, lightGBM also proposes GOSS method to better reduce RAM usage and save computing time during finding the best features and best split points.  
 
   The basic idea behind GOSS is quite similar to Adaboost. Recall in Adaboost, we keep adjusting the weights for each sample in each iteration. We decrease the weight for correctly identified samples and increase the weight for incorrectly identified samples.  
+  
+  However, in GBDT and XGboost, there are no native sample weight, so we have to go thought every samples to find the best split points. But in LightGBM, it uses the gradient of each data instance as a proxy for sample weight. That is, if a sample is associated with a small gradient, then it is likely that the training error for this instance is small and it is already well-trained. And vice versa.  
 
+  So after computing, we can consider dropping samples with low gradients so as to save computing time during finding the best splits. But if we truly drop samples with gradients less than a certain threshold, then it is likely that we already change the sample distribution and this may lead to low explaining power of the model.  
+
+  So in GOSS, we retain samples with high gradients but at the same time randomly sample instances with low gradeints. In order to compensate 
+  the effect from only selecting portion of the samples with small gradients, GOSS introduces a constant multiplier for the data instances with small gradients during computing the information gain.  
+  
+  Specifically, GOSS firstly sorts the data instances according to the absolute value of samples' gradients and then selects the top a * 100% instances. It will also randomly sample b * 100% instances with low gradients. After that, GOSS will amplify the sampled instances with small gradients by a constant ![img](https://latex.codecogs.com/svg.latex?%5Cfrac%7B1-a%7D%7Bb%7D). In this way, GOSS shifts models focuses to more under-trained instances.  
+
+  - what is variance gain  
+
+    In GOSS, LightGBM model use variance gain ![img](https://latex.codecogs.com/svg.latex?%5Ctilde%7BV_j%7D%28d%29) on feature j given split point d as below:  
+
+    ![img](https://latex.codecogs.com/svg.latex?%5Ctilde%7BV_j%7D%28d%29%20%3D%20%5Cfrac%7B1%7D%7Bn%7D%20%28%5Cfrac%7B%28%5Csum_%7Bx_i%5Cin%20A_l%7D%20g_i%20%5C%2C%20&plus;%5C%2C%20%5Cfrac%7B1-a%7D%7Bb%7D%20%5Csum_%7Bx_i%5Cin%20B_l%7D%20g_i%29%5E2%7D%7Bn_l%5Ej%28d%29%7D%20&plus;%20%5Cfrac%7B%28%5Csum_%7Bx_i%5Cin%20A_r%7D%20g_i%20%5C%2C%20&plus;%5C%2C%20%5Cfrac%7B1-a%7D%7Bb%7D%20%5Csum_%7Bx_i%5Cin%20B_r%7D%20g_i%29%5E2%7D%7Bn_r%5Ej%28d%29%7D%20%29)  
+
+    Where A is the instance set with high graidents, and B is the instance set with low gradients. ![img](https://latex.codecogs.com/svg.latex?g_i) is the gradient of each samples. And Al, Bl, Ar, Br, nl, nr are define as below:  
+
+    ![img](https://latex.codecogs.com/svg.latex?%5Cleft%5C%7B%5Cbegin%7Bmatrix%7D%20%26%20A_l%20%3D%20%5C%7B%20x_i%20%5Cin%20A%3A%20x_%7Bij%7D%20%5Cleq%20d%5C%7D%20%5C%5C%20%26%20A_r%20%3D%20%5C%7B%20x_i%20%5Cin%20A%3A%20x_%7Bij%7D%20%3E%20d%5C%7D%20%5C%5C%20%26%20B_l%20%3D%20%5C%7B%20x_i%20%5Cin%20B%3A%20x_%7Bij%7D%20%5Cleq%20d%5C%7D%20%5C%5C%20%26%20B_r%20%3D%20%5C%7B%20x_i%20%5Cin%20B%3A%20x_%7Bij%7D%20%3E%20d%5C%7D%20%5C%5C%20%26%20n_l%5Ej%20%28d%29%20%3D%20%5Csum%20%5Cmathbb%7BI%7D%28x_i%20%5Cin%20%28A_l%20%5Ccup%20B_l%29%29%20%5C%5C%20%26%20n_r%5Ej%20%28d%29%20%3D%20%5Csum%20%5Cmathbb%7BI%7D%28x_i%20%5Cin%20%28A_r%20%5Ccup%20B_r%29%29%20%5C%5C%20%5Cend%7Bmatrix%7D%5Cright.)  
+
+    This means during finding the best split point d of feature j, we just need to find the d that maximize ![img](https://latex.codecogs.com/svg.latex?%5Ctilde%7BV%7D_j%28d%29). While in traditional GBDT, the variance loss as below:  
+
+    ![img](https://latex.codecogs.com/svg.latex?V_j%28d%29%20%3D%20%5Cfrac%7B1%7D%7Bn_o%7D%20%28%5Cfrac%7B%5Csum_%7Bx_i%5Cin%20O_l%7D%20g_i%5E2%20%7D%7Bn_l%5Ej%28d%29%7D%20&plus;%20%5Cfrac%7B%5Csum_%7Bx_i%5Cin%20O_r%7D%20g_i%5E2%20%7D%7Bn_r%5Ej%28d%29%7D%20%29)  
+
+    Where O is the current node. ![img](https://latex.codecogs.com/svg.latex?g_i) is the gradient of each samples. And Ol, Or, no, nl, nr are define as below:  
+
+    ![img](https://latex.codecogs.com/svg.latex?%5Cleft%5C%7B%5Cbegin%7Bmatrix%7D%20%26%20O_l%20%3D%20%5C%7B%20x_i%20%5Cin%20O%3A%20x_%7Bij%7D%20%5Cleq%20d%5C%7D%20%5C%5C%20%26%20O_r%20%3D%20%5C%7B%20x_i%20%5Cin%20O%3A%20x_%7Bij%7D%20%3E%20d%5C%7D%20%5C%5C%20%26%20n_o%20%3D%20%5Csum%20%5Cmathbb%7BI%7D%28x_i%20%5Cin%20O%29%20%5C%5C%20%26%20n_l%5Ej%20%28d%29%20%3D%20%5Csum%20%5Cmathbb%7BI%7D%28x_i%20%5Cin%20%28O_l%29%29%20%5C%5C%20%26%20n_r%5Ej%20%28d%29%20%3D%20%5Csum%20%5Cmathbb%7BI%7D%28x_i%20%5Cin%20%28O_r%29%29%20%5C%5C%20%5Cend%7Bmatrix%7D%5Cright.)  
+
+  - The math behind variance gain  
+
+    The term variance gain might seems unfamiliar, but this is actually the same as the MSE case discussed in Gradient Boosting regression tree.  
+
+    Recall in GBDT, we are fitting a regression tree to predict the gradient so far:  
+
+    ![img](https://latex.codecogs.com/svg.latex?b_m%28x%29%20%3D%20%5Cunderset%7Bb%28x%29%20%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5B%5Ctilde%7By_i%7D%20-%20b%28x%29%5D%5E2)  
+
+    Suppose now we in the middle of fitting new tree b(x), we have J features in total, then our loss before the next split on feature ![img](https://latex.codecogs.com/svg.latex?%5Ctilde%7Bj%7D) is be:  
+
+    ![img](https://latex.codecogs.com/svg.latex?Loss_%7B%5C%2C%20before%7D%20%3D%20%5Csum_%7Bj%3D1%7D%5E%7BJ%7D%20%5Csum_%7Bi%5Cin%20%5Cxi_j%7D%5E%7B%20%7D%20%28g_i%20-%20%5Cfrac%7B1%7D%7B%7C%5Cxi_j%7C%7D%5Csum_%7Bi%5Cin%20%5Cxi_j%7D%5E%7B%20%7D%20g_i%29%5E2)  
+
+    Where ![img](https://latex.codecogs.com/svg.latex?%5Cxi_j) is the final leaf of each feature j.  
+
+    Then our loss after the next split on feature ![img](https://latex.codecogs.com/svg.latex?%5Ctilde%7Bj%7D) is be:  
+
+    ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26Loss_%7B%5C%2C%20after%7D%20%3D%20%5Csum_%7Bj%3D1%2C%20j%5Cneq%20%5Ctilde%7Bj%7D%7D%5E%7BJ%7D%20%5Csum_%7Bi%5Cin%20%5Cxi_j%7D%5E%7B%20%7D%20%28g_i%20-%20%5Cfrac%7B1%7D%7B%7C%5Cxi_j%7C%7D%5Csum_%7Bi%5Cin%20%5Cxi_j%7D%5E%7B%20%7D%20g_i%29%5E2%20&plus;%20%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL%7D%5E%7B%20%7D%20%28g_i%20-%20%5Cfrac%7B1%7D%7B%7C%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL%7C%7D%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL%7D%5E%7B%20%7D%20g_i%29%5E2%20%5C%5C%20%26%20&plus;%20%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER%7D%5E%7B%20%7D%20%28g_i%20-%20%5Cfrac%7B1%7D%7B%7C%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER%7C%7D%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER%7D%5E%7B%20%7D%20g_i%29%5E2%20%5Cend%7Balign*%7D)  
+
+    Where ![img](https://latex.codecogs.com/svg.latex?%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL) is the left final leaf of  ![img](https://latex.codecogs.com/svg.latex?%5Ctilde%7Bj%7D) after this split, and ![img](https://latex.codecogs.com/svg.latex?%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER) is the right final leaf of ![img](https://latex.codecogs.com/svg.latex?%5Ctilde%7Bj%7D) after this split.  
+
+    So our gain from this split is:  
+
+    ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26Gain%20%3D%20%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%7D%5E%7B%20%7D%20%28g_i%20-%20%5Cfrac%7B1%7D%7B%7C%5Cxi_%7B%5Ctilde%7Bj%7D%7D%7C%7D%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%7D%5E%7B%20%7D%20g_i%29%5E2%20-%20%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL%7D%5E%7B%20%7D%20%28g_i%20-%20%5Cfrac%7B1%7D%7B%7C%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL%7C%7D%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL%7D%5E%7B%20%7D%20g_i%29%5E2%20%5C%5C%20%26%20-%20%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER%7D%5E%7B%20%7D%20%28g_i%20-%20%5Cfrac%7B1%7D%7B%7C%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER%7C%7D%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER%7D%5E%7B%20%7D%20g_i%29%5E2%20%5Cend%7Balign*%7D)  
+
+    Recall the below formula:  
+
+    ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26%5Csum%20%28y_i%20-%20%5Cbar%7By%7D%29%5E2%20%3D%20%5Csum%20%28y_i%20-%20%5Cfrac%7B1%7D%7Bn%7D%5Csum%20y_i%20%29%5E2%20%3D%20%5Csum%20y_i%5E2%20-%202*%5Cbar%7By%7D*%5Csum%20y_i%20&plus;%20n%20*%20%5Cbar%7By%7D%5E2%5C%5C%20%26%20%3D%20%5Csum%20y_i%5E2%20-%202*n%20*%20%5Cbar%7By%7D%5E2%20&plus;%20n%20*%20%5Cbar%7By%7D%5E2%5C%5C%20%26%3D%20%5Csum%20y_i%5E2%20-%20n%20*%20%5Cbar%7By%7D%5E2%5C%5C%20%26%3D%20%5Csum%20y_i%5E2%20-%20%5Cfrac%7B1%7D%7Bn%7D%20*%20%28%20%5Csum%20y_i%29%5E2%5C%5C%20%5Cend%7Balign*%7D)  
+
+    So that our gain from this split now becomes:  
+
+    ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26Gain%20%3D%20%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%7D%5E%7B%20%7D%20%28g_i%20-%20%5Cfrac%7B1%7D%7B%7C%5Cxi_%7B%5Ctilde%7Bj%7D%7D%7C%7D%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%7D%5E%7B%20%7D%20g_i%29%5E2%20-%20%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL%7D%5E%7B%20%7D%20%28g_i%20-%20%5Cfrac%7B1%7D%7B%7C%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL%7C%7D%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL%7D%5E%7B%20%7D%20g_i%29%5E2%20-%20%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER%7D%5E%7B%20%7D%20%28g_i%20-%20%5Cfrac%7B1%7D%7B%7C%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER%7C%7D%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER%7D%5E%7B%20%7D%20g_i%29%5E2%20%5C%5C%20%26%20%3D%20%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%7D%5E%7B%20%7D%20%28g_i%20-%20%5Cfrac%7B1%7D%7B%7C%5Cxi_%7B%5Ctilde%7Bj%7D%7D%7C%7D%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%7D%5E%7B%20%7D%20g_i%29%5E2%20-%20%28%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL%7D%5E%7B%20%7Dg_i%5E2%20&plus;%20%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER%7D%5E%7B%20%7Dg_i%5E2%29%20&plus;%5Cfrac%7B1%7D%7B%7C%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL%7C%7D%20*%20%28%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL%7D%5E%7B%20%7Dg_i%29%5E2%20&plus;%5Cfrac%7B1%7D%7B%7C%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER%7C%7D%20*%20%28%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER%7D%5E%7B%20%7Dg_i%29%5E2%5C%5C%20%5Cend%7Balign*%7D)  
+
+    You can find out that only the below part in the above formula changes according the different split point value:  
+
+    ![img](https://latex.codecogs.com/svg.latex?%5Cfrac%7B1%7D%7B%7C%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL%7C%7D%20*%20%28%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5EL%7D%5E%7B%20%7Dg_i%29%5E2%20&plus;%5Cfrac%7B1%7D%7B%7C%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER%7C%7D%20*%20%28%5Csum_%7Bi%5Cin%20%5Cxi_%7B%5Ctilde%7Bj%7D%7D%5ER%7D%5E%7B%20%7Dg_i%29%5E2)  
+
+    And this part is almost just the same as the variance gain defined in GBDT above except for a multipler n, and this multipler will not change the optimization process during finding the best split point d:  
+
+    ![img](https://latex.codecogs.com/svg.latex?V_j%28d%29%20%3D%20%5Cfrac%7B1%7D%7Bn_o%7D%20%28%5Cfrac%7B%5Csum_%7Bx_i%5Cin%20O_l%7D%20g_i%5E2%20%7D%7Bn_l%5Ej%28d%29%7D%20&plus;%20%5Cfrac%7B%5Csum_%7Bx_i%5Cin%20O_r%7D%20g_i%5E2%20%7D%7Bn_r%5Ej%28d%29%7D%20%29)  
+
+    The math behind the variance gain in LightGBM (the one including balancing the distribution of low gradient samples and high graident sample) is far more complex than the proof above, it also includes proving why in GOSS we won't lose much accuracy comparing with the exact greedy method. Here we will skip it.  
+
+- **d. What is EFB(Exclusive Feature Bundling)**  
+  LightGBM also proposes a method to reduce the number of features during find the best features to save computing time.  
+
+  
   
