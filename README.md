@@ -14,5 +14,5 @@ Boosted Decision Tree
 ------------
 [**1. Adaptive Boosting (AdaBoost)**](./AdaBoost.md)  
 [**2. GBM (Gradient Boosting Machine)**](./GBM.md)  
-[**3. XGboost (Extreme Gradient Boosting)**](./XGboost.md)
-
+[**3. XGboost (Extreme Gradient Boosting)**](./XGboost.md)  
+[**4. Light Gradient Boosting Machine (LightGBM)**](./LightGBM.md)  
