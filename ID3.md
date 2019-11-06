@@ -25,7 +25,7 @@ So the information gain g(D, A) of dataset D given feature A is as below:
 
 - **b. How to compute information gain**  
 
-  Suppose that the dataset D has k category, each category is C1, c2, ... , ck.
+  Suppose that the dataset D has k category, each category is c1, c2, ... , ck.
 Suppose that feature A can split the dataset into n subset D1, D2, D3,..., Dn.  
 Suppose that Dik denotes the subset of the sample of category k in subset Di.  
     1. **compute H(D) of dataset D**   
