@@ -16,9 +16,10 @@ Splitting the dataset recurrently on the features that yields the maximum inform
   Suppose that a random variable X follows the below dirtribution:  
 
   ![img](https://latex.codecogs.com/svg.latex?%5Cbg_black%20P%28X%3Dx%29%3Dp_%7Bi%7D%2C%20i%20%3D%201%2C2%2C3%2C...%2Cn)  
-  Then the entropy of X is as below:  
+  Then the entropy of X is as below. And high entropy value also means more uncertain variables.   
 
   ![img](https://latex.codecogs.com/svg.latex?%5Cbg_black%20%24H%28X%29%20%3D%20-%5Csum_%7Bi%20%3D%201%7D%5E%7Bn%7Dp_%7Bi%7D%5Clog%28p_%7Bi%7D%29%24)  
+ 
 So the information gain g(D, A) of dataset D given feature A is as below:
 
   ![img](https://latex.codecogs.com/svg.latex?%5Cbg_black%20g%28D%2CA%29%3DH%28D%29-H%28D%7CA%29) 
@@ -48,7 +49,8 @@ Model Output: ID3 decision tree.
   (2.2) If A is not empty, then we loop through the feature set A, compute the information gain for each feature using the equations in a and b.
   Suppose among them the maximum information gain is ga, obtained by splitting on the featurea a.   
   (2.2.1) If ga > threshold e, then we split on feature a, and split dataset into mini subset {D1, D2, ... Di} based on different values of categorical feature a. For each subset in {D1, D2, ... Di}, treat Di as the new dataset D, and treat A-{a} as the new feature set A, repeat the splitting process.  
-  (2.2.2) If ga <= threshold e, then we split stop splitting at this node, set this final node to be the class that has the most samples.  
+  (2.2.2) If ga <= threshold e, then we split stop splitting at this node, set this final node to be the class that has the most samples. 
+  
   (3) The tree stops growing when there is no splitting in any of the subsets.
 
 
