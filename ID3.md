@@ -20,7 +20,7 @@ Splitting the dataset recurrently on the features that yields the maximum inform
 
   ![img](https://latex.codecogs.com/svg.latex?%5Cbg_black%20%24H%28X%29%20%3D%20-%5Csum_%7Bi%20%3D%201%7D%5E%7Bn%7Dp_%7Bi%7D%5Clog%28p_%7Bi%7D%29%24)  
  
-So the information gain g(D, A) of dataset D given feature A is as below:
+  So the information gain g(D, A) of dataset D given feature A is as below:
 
   ![img](https://latex.codecogs.com/svg.latex?%5Cbg_black%20g%28D%2CA%29%3DH%28D%29-H%28D%7CA%29) 
 
