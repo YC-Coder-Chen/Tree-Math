@@ -67,3 +67,60 @@ During each split, we find the feature that gives the dataset the minimum Gini i
   (2.2.1) If MSE decrease = MSE_before - MSE_after > threshold e, then we split on feature j, and break dataset into separate subset T1, T2 based on splitting value s. For each subset dataset in {T1, T2}, treat Ti as the new dataset D, recurrently continue this splitting process.  
   (2.2.2) If MSE decrease <= threshold e, then we stop splitting at this node, set this final node to be the average of the output variable y that belongs to this subset. 
 
+**Scikitlearn Application**
+> **Decision Tree Function**:   
+***Class*** sklearn.tree.DecisionTreeClassifier (criterion=’gini’,     splitter=’best’, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features=None, random_state=None, max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, class_weight=None, presort=False)
+
+- **criterion** : string, optional (default=”gini”)  
+  **'gini'** for gini impurity, **'entropy'** for information gain which is discussed in C4_5 decsion tree.
+ 
+- **splitter** : string, optional (default=”best”)   
+  **'best'** means searching through all features and values and picking the best split based on the criterion (gini impurity or entropy value). 
+  **'random'** means considering a random subset of features and picking the best split within this subset. This option is less computation-intensive and less prone to overfitting. It makes more sense if all variables are somewhat equally relevant to the output variable.
+
+- **max_depth** : int or None, optional (default=None)  
+  How deep the tree can grow. For example, a tree with a max_depth of 2 is allowed to split into a maximum of 4 leaf nodes. This term is often tuned to regularize the tree and prevent overfitting. 
+
+- **min_sample_split & min_sample_leaf** : int, float, optional    
+  min_sample_split defines the minimum number of samples required to split an internal node. min_sample_leaf defines the minimum number of samples required to be at a leaf node. Recall that in the recurrent algorithm, after splitting the dataset D into subset {T1, T2}, we treat each subset as the new dataset. However,if you set the min_sample_split = A, and the min_sample_leaf = B, then every dataset (subset) D will continue splitting only when the subset itself contains more than A samples and the subsets D splits into contain more than B samples. So these two hyperparameters are used to regularize the growth of the tree.
+  
+  Values for these two hyperparameters can be int or float. If int, it specifies exact sample numbers. If float, it means fraction and equals to ceil(fraction*total_number_of_samples). For example, set float value as 0.3 equals to set an int value of 30 in a dataset with 101 samples. 
+
+- **min_weight_fraction_leaf** : float, optional (default=0.)  
+  The minimum weighted fraction of the sum total of weights (of all the input samples) required to be at a leaf node. Samples have equal weight when sample_weight is not provided.
+  
+
+- **max_features** : int, float, string or None, optional (default=None)  
+  max_features represents the number of features to consider when looking for the best split. For example, if you set max_feature at 10, then at each splitting, the algorithm will randomly select 10 features and search for the best one out of the ten features. Note that sometimes the search will exceed the max_features if the algorithm cannot find a valid partition of node samples in the first search. Similar to min_sample_split, values for this hyperparameter could be int or float or {'auto','sqrt','log2','none'}, please refer to the official document for more explanation. There is also an article introducing how to pick the max_features in decision tree and random forests.
+
+- **max_leaf_nodes** : int or None, optional (default=None)    
+  Grow a tree with max_leaf_nodes in best-first fashion. Please refer to the introduction of lightGMB for difference between level-wise tree and leaf-wise tree (best-first search algorithm).
+
+- **min_impurity_decrease** : float, optional (default=0.)   
+  A node will be split if this split induces a decrease of the impurity greater than or equal to this value. So this hyperparameter represents the threshold value e in the algorithm. Recall that in (2.2.1), Gini decrease = Gini_before - Gini_after, however in real practice, Gini decrease is calculated using the below formula:  
+
+  ![img](https://latex.codecogs.com/svg.latex?%5Cfrac%7BN_t%7D%7BN%7D%20*%20%28impurity%20-%20%5Cfrac%7BN_%7BtR%7D%7D%7BN_t%7D%20*%20right%5C_impurity%20-%20%5Cfrac%7BN_%7BtL%7D%7D%7BN_t%7D%20*%20left%5C_impurity%29)
+
+  where N is the total number of samples, N_t is the number of samples at the current node, N_t_L is the number of samples in the left child, and N_t_R is the number of samples in the right child. Using the weighted Gini decrease doesn't affect picking the best features, it only influences the splitting decision. 
+
+- **class_weight** : dict, list of dicts, “balanced” or None, default=None 
+  Weights associated with classes in the form {class_label: weight}. Use this hyperparameter to adjust for importance of each class. **balanced** automatically adjust weights inversely to class frequencies in this formula. So less frequent classes are assigned higher weigths.
+
+  ![img](https://latex.codecogs.com/svg.latex?%5Cfrac%7Bn%5C_samples%7D%7Bn%5C_class%20*%20np.bincount%28y%29%7D)
+  
+  If class_weight is passed, weighted sum is used for calculating the Nt, N, NtR, NtL in the min_impurity_decrease.
+
+- **presort** : bool, optional (default=False)  
+  Whether to presort the data to speed up the finding of best splits in fitting. For the default settings of a decision tree on large datasets, setting this to true may slow down the training process. When using either a smaller dataset or a restricted depth, this may speed up the training.
+
+
+
+**Reference**  
+
+1. https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html#sklearn.tree.DecisionTreeClassifier 
+2. https://stackoverflow.com/questions/46756606/what-does-splitter-attribute-in-sklearns-decisiontreeclassifier-do 
+3. https://medium.com/@mohtedibf/indepth-parameter-tuning-for-decision-tree-6753118a03c3
+4. https://discuss.analyticsvidhya.com/t/what-does-min-samples-split-means-in-decision-tree/6233/2
+5. **How to set max_features**: https://stats.stackexchange.com/questions/324370/references-on-number-of-features-to-use-in-random-forest-regression 
+6. https://medium.com/datadriveninvestor/decision-tree-adventures-2-explanation-of-decision-tree-classifier-parameters-84776f39a28
+7. https://towardsdatascience.com/scikit-learn-decision-trees-explained-803f3812290d 
