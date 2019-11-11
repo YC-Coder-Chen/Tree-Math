@@ -188,4 +188,4 @@ Suppose that now we have finished m-1 iterations and successfully computed the f
 9. https://zhuanlan.zhihu.com/p/41536315 [Chinese]
 10. https://zhuanlan.zhihu.com/p/37358517 [Chinese]
 11. https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostClassifier.html
-12. 
+12. https://chrisalbon.com/machine_learning/trees_and_forests/adaboost_classifier/
