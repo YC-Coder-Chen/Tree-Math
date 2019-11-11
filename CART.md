@@ -67,7 +67,7 @@ During each split, we find the feature that gives the dataset the minimum Gini i
   (2.2.1) If MSE decrease = MSE_before - MSE_after > threshold e, then we split on feature j, and break dataset into separate subset T1, T2 based on splitting value s. For each subset dataset in {T1, T2}, treat Ti as the new dataset D, recurrently continue this splitting process.  
   (2.2.2) If MSE decrease <= threshold e, then we stop splitting at this node, set this final node to be the average of the output variable y that belongs to this subset. 
 
-**Scikitlearn Application**
+**Scikit-learn Application**
 > **Decision Tree Function**:   
 ***Class*** sklearn.tree.DecisionTreeClassifier (criterion=’gini’,     splitter=’best’, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features=None, random_state=None, max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, class_weight=None, presort=False)
 
