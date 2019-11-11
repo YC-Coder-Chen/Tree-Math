@@ -149,3 +149,13 @@ We use regression tree as the example.
   XGboost achieved parallel learning by storing data in compressed column (CSC) format, parallelly computing gradient & second derivatives of each feature and parallelly computing the best split points. For example, assume there are 4 features in our dataset and it costs us 10 seconds to find out the best split point on one feature, then the traditional method needs to check feature one by one and spend 40 seconds to find the best features & corresponding split points. But XGboost only costs 10 seconds.  
   
   Here we won't introduce much of the rest system design, because these are more related to CS domain.  
+
+**Reference**  
+
+1. Chen T, Guestrin C. Xgboost: A scalable tree boosting system[C]//Proceedings of the 22nd acm sigkdd international conference on knowledge discovery and data mining. ACM, 2016: 785-794.
+2. Nielsen D. Tree Boosting With XGBoost-Why Does XGBoost Win" Every" Machine Learning Competition?[D]. NTNU, 2016.
+3. https://github.com/dmlc/xgboost
+4. https://machinelearningmastery.com/gentle-introduction-xgboost-applied-machine-learning/
+5. https://towardsdatascience.com/xgboost-mathematics-explained-58262530904a
+6. https://zhuanlan.zhihu.com/p/46683728 [Chinese]
+7. https://zhuanlan.zhihu.com/p/40129825 [Chinese]

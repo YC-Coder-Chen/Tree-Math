@@ -3,8 +3,9 @@ Tree-Math
 Machine learning study notes, contains Math behind all the mainstream tree-based machine learning models, covering basic decision tree models (ID3, C4.5, CART), boosted models (GBM, AdaBoost, Xgboost, LightGBM), bagging models (Random Forest).  
 
 
-Co-Author
+Author
 ------------
+[**@Yingxiang Chen**](https://github.com/YC-Coder-Chen)  
 [**@Zihan Yang**](https://github.com/echoyang48)
 
 

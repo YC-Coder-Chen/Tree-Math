@@ -53,4 +53,13 @@ Model Output: ID3 decision tree.
   
   (3) The tree stops growing when there is no splitting in any of the subsets.
 
+**Reference**  
+
+1. Quinlan J R. Induction of Decision Trees. Mach. Learn[J]. 1986. 
+2. Quinlan J R. C4. 5: programs for machine learning[M]. Elsevier, 2014.
+3. Hang Li. Statistical Learning Method[M]. Tsinghua University Press, 2019. [Chinese]
+4. Zhihua Zhou. Machine Learning[M]. Tsinghua University Press, 2018. [Chinese]
+5. Wikipedia contributors. ID3 algorithm. Wikipedia, The Free Encyclopedia. October 23, 2019, 17:33 UTC. Available at: https://en.wikipedia.org/w/index.php?title=ID3_algorithm&oldid=922686642. Accessed November 11, 2019.
+6. https://medium.com/machine-learning-guy/an-introduction-to-decision-tree-learning-id3-algorithm-54c74eb2ad55
+7. https://towardsdatascience.com/decision-trees-introduction-id3-8447fd5213e9
 

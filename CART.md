@@ -117,10 +117,15 @@ During each split, we find the feature that gives the dataset the minimum Gini i
 
 **Reference**  
 
-1. https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html#sklearn.tree.DecisionTreeClassifier 
-2. https://stackoverflow.com/questions/46756606/what-does-splitter-attribute-in-sklearns-decisiontreeclassifier-do 
-3. https://medium.com/@mohtedibf/indepth-parameter-tuning-for-decision-tree-6753118a03c3
-4. https://discuss.analyticsvidhya.com/t/what-does-min-samples-split-means-in-decision-tree/6233/2
-5. **How to set max_features**: https://stats.stackexchange.com/questions/324370/references-on-number-of-features-to-use-in-random-forest-regression 
-6. https://medium.com/datadriveninvestor/decision-tree-adventures-2-explanation-of-decision-tree-classifier-parameters-84776f39a28
-7. https://towardsdatascience.com/scikit-learn-decision-trees-explained-803f3812290d 
+1. Breiman L, Friedman J, Olshen R, et al. Classification and regression trees. Wadsworth Int[J]. Group, 1984, 37(15): 237-251.
+2. Quinlan J R. C4. 5: programs for machine learning[M]. Elsevier, 2014.
+3. Hang Li. Statistical Learning Method[M]. Tsinghua University Press, 2019. [Chinese]
+4. Zhihua Zhou. Machine Learning[M]. Tsinghua University Press, 2018. [Chinese]
+5. Wikipedia contributors. Decision tree learning. Wikipedia, The Free Encyclopedia. October 21, 2019, 22:08 UTC. Available at: https://en.wikipedia.org/w/index.php?title=Decision_tree_learning&oldid=922400627. Accessed November 11, 2019.
+6. https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html#sklearn.tree.DecisionTreeClassifier 
+7. https://stackoverflow.com/questions/46756606/what-does-splitter-attribute-in-sklearns-decisiontreeclassifier-do 
+8. https://medium.com/@mohtedibf/indepth-parameter-tuning-for-decision-tree-6753118a03c3
+9. https://discuss.analyticsvidhya.com/t/what-does-min-samples-split-means-in-decision-tree/6233/2
+10. **How to set max_features**: https://stats.stackexchange.com/questions/324370/references-on-number-of-features-to-use-in-random-forest-regression 
+11. https://medium.com/datadriveninvestor/decision-tree-adventures-2-explanation-of-decision-tree-classifier-parameters-84776f39a28
+12. https://towardsdatascience.com/scikit-learn-decision-trees-explained-803f3812290d 

@@ -146,3 +146,16 @@ AdaBoost uses exponential loss and the exponential loss grows exponentially for 
   (3) So we will output our final model f_M(x) and final predicted probability p_M(x):  
 
     ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26f_M%28x%29%20%3D%20f_o%28x%29%20&plus;%20%5Csum_%7Bm%3D1%7D%5E%7BM%7D%5Csum_%7Bj%3D1%7D%5E%7BJ%7D%20%5Cgamma_%7Bj%2Cm%7D%20*%20%5Cmathbb%7BI%7D%28x_i%20%5Cin%20R_%7Bj%2Cm%7D%29%5C%5C%20%26%5CRightarrow%20p_M%28y_i%3D1%7Cx_i%29%20%3D%20%5Cfrac%7B1%7D%7B1&plus;exp%28-f_M%28x%29%29%7D%20%5C%5C%20%5Cend%7Balign*%7D)  
+
+**Reference**  
+
+1. Friedman J H. Greedy function approximation: a gradient boosting machine[J]. Annals of statistics, 2001: 1189-1232.
+2. Friedman J H. Stochastic gradient boosting[J]. Computational statistics & data analysis, 2002, 38(4): 367-378.
+3. Hang Li. Statistical Learning Method[M]. Tsinghua University Press, 2019. [Chinese]
+4. Zhihua Zhou. Machine Learning[M]. Tsinghua University Press, 2018. [Chinese]
+5. Mason L, Baxter J, Bartlett P L, et al. Boosting algorithms as gradient descent[C]//Advances in neural information processing systems. 2000: 512-518.
+6. Wikipedia contributors. Gradient boosting. Wikipedia, The Free Encyclopedia. October 21, 2019, 23:33 UTC. Available at: https://en.wikipedia.org/w/index.php?title=Gradient_boosting&oldid=922411214. Accessed November 11, 2019.
+7. https://towardsdatascience.com/understanding-gradient-boosting-machines-9be756fe76ab
+8. https://medium.com/mlreview/gradient-boosting-from-scratch-1e317ae4587d
+9. https://zhuanlan.zhihu.com/p/38329631 [Chinese]
+10. https://zhuanlan.zhihu.com/p/43940320 [Chinese]

@@ -209,3 +209,15 @@ The most important difference is that GBM needs to go through every possible fea
   ![img](./source_photo/lightgbm_leaf_wise.png)  
 
   In fact, the Histogram Algorithm, GOSS and EFB techniques in LightGBM not only increase training speed, reduce RAM usage, but also act as the natural anti-overfit tools. Because they make the model less sensitive to tiny changes in the dataset. Therefore, the Leaf-wise tree growing strategy works perfectly in LightGBM.  
+
+**Reference**  
+
+1. Ke G, Meng Q, Finley T, et al. Lightgbm: A highly efficient gradient boosting decision tree[C]//Advances in Neural Information Processing Systems. 2017: 3146-3154.
+2. Meng Q, Ke G, Wang T, et al. A communication-efficient parallel algorithm for decision tree[C]//Advances in Neural Information Processing Systems. 2016: 1279-1287.
+3. https://lightgbm.readthedocs.io/en/latest/index.html
+4. http://datacruiser.io/2019/08/12/DataWhale-Workout-No-8-LightGBM-Summary/ [Chinese]
+5. https://zhuanlan.zhihu.com/p/38516467 [Chinese]
+6. https://github.com/microsoft/LightGBM
+7. https://medium.com/@pushkarmandot/https-medium-com-pushkarmandot-what-is-lightgbm-how-to-implement-it-how-to-fine-tune-the-parameters-60347819b7fc
+8. https://sefiks.com/2018/10/13/a-gentle-introduction-to-lightgbm-for-applied-machine-learning/
+9. https://www.bilibili.com/video/av47496956/ [Video in Chinese created by Microsoft Research Lab - Asia]
