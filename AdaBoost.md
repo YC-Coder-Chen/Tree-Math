@@ -157,6 +157,24 @@ Suppose that now we have finished m-1 iterations and successfully computed the f
 
   which means that, if the classification is correct, then the weight of that sample will decrease, but if the classification is wrong, then the weight of that sample will increase.  
 
+**Scikit-learn Application**
+> **AdaBoostClassifier**:   
+****class**** sklearn.ensemble.AdaBoostClassifier(base_estimator=None, n_estimators=50, learning_rate=1.0, algorithm=’SAMME.R’, random_state=None)
+
+- **base_estimator** : object, optional (default=None)  
+  The base estimator from which the boosted ensemble is built. The default base estimator is DecisionTreeClassifier(max_depth=1), you can also use other machine learning models such as SVC. It corresponds to the bm(x) in the formula.
+
+- **n_estimators** : integer, optional (default=50)  
+  The maximum number of estimators at which boosting is terminated, and represents the M in the formula.
+
+- **learning_rate** : float, optional (default=1.)  
+  Learning rate shrinks the contribution of each classifier by learning_rate. Reducing learning rate forces the weight to change in a smaller pace, so it slows down the training porcess, but sometimes resulting in a better performance. 
+
+- **algorithm** :{‘SAMME’, ‘SAMME.R’}, optional (default=’SAMME.R’)  
+  If ‘SAMME.R’ then use the SAMME.R real boosting algorithm. base_estimator must support calculation of class probabilities. If ‘SAMME’ then use the SAMME discrete boosting algorithm. The SAMME.R algorithm typically converges faster than SAMME, achieving a lower test error with fewer boosting iterations.
+
+
+
 **Reference**  
 
 1. Freund Y, Schapire R, Abe N. A short introduction to boosting[J]. Journal-Japanese Society For Artificial Intelligence, 1999, 14(771-780): 1612.
@@ -169,3 +187,5 @@ Suppose that now we have finished m-1 iterations and successfully computed the f
 8. https://towardsdatascience.com/understanding-adaboost-2f94f22d5bfe
 9. https://zhuanlan.zhihu.com/p/41536315 [Chinese]
 10. https://zhuanlan.zhihu.com/p/37358517 [Chinese]
+11. https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostClassifier.html
+12. 
