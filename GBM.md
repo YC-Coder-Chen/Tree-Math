@@ -166,7 +166,7 @@ AdaBoost uses exponential loss and the exponential loss grows exponentially for 
 - **n_estimators** : int (default=100)  
   Numbers of estimators in the model. It refers to M in the formular. Gradient boosting is fairly robust to over-fitting so a large number usually results in better performance.
 
-- **subsample** : loat, optional (default=1.0)
+- **subsample** : loat, optional (default=1.0)  
   The fraction of samples to be randomely selected and used in each weak base learner. Subsample interacts with the parameter n_estimators. Choosing subsample < 1.0 leads to a reduction of variance and an increase in bias. Generally ~0.8 works fine. 
 
 - **init** : estimator or ‘zero’, optional (default=None)  
@@ -175,10 +175,10 @@ AdaBoost uses exponential loss and the exponential loss grows exponentially for 
 - **alpha** : float (default=0.9)  
   The alpha-quantile of the huber loss function and the quantile loss function. Only if loss='huber' or loss='quantile'.
 
-- **verbose** : int, default: 0
+- **verbose** : int, default: 0  
   Enable verbose output. Default doesn't generate output. If 1 then it prints progress and performance once in a while (the more trees the lower the frequency). If greater than 1 then it prints progress and performance for every tree.
 
-- **warm_start** : bool, default: False  
+- **warm_start** : bool, default: False    
   When warm_start is true, the existing fitted model attributes are used to initialise the new model in a subsequent call to fit. In other words, we can add more trees on a trained model.
 
 - **validation_fraction** : float, optional, default 0.1  
