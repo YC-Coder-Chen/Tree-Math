@@ -168,7 +168,7 @@ Suppose that now we have finished m-1 iterations and successfully computed the f
   The maximum number of estimators at which boosting is terminated, and represents the M in the formula.
 
 - **learning_rate** : float, optional (default=1.)  
-  Learning rate shrinks the contribution of each classifier by learning_rate. Reducing learning rate forces the weight to change in a smaller pace, so it slows down the training porcess, but sometimes resulting in a better performance. 
+  Learning rate shrinks the contribution of each classifier by learning_rate. For example, suppose previous prediction fm-1 = 1, learning rate = 0.1, and next tree correction = 0.5, then the updated prediction fm = 1 + 0.1 * 0.5 = 1.05. Reducing learning rate forces the weight to change in a smaller pace, so it slows down the training porcess, but sometimes resulting in a better performance. 
 
 - **algorithm** :{‘SAMME’, ‘SAMME.R’}, optional (default=’SAMME.R’)  
   If ‘SAMME.R’ then use the SAMME.R real boosting algorithm. base_estimator must support calculation of class probabilities. If ‘SAMME’ then use the SAMME discrete boosting algorithm. The SAMME.R algorithm typically converges faster than SAMME, achieving a lower test error with fewer boosting iterations.

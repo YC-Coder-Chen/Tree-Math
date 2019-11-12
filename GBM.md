@@ -151,6 +151,47 @@ AdaBoost uses exponential loss and the exponential loss grows exponentially for 
 
     ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26f_M%28x%29%20%3D%20f_o%28x%29%20&plus;%20%5Csum_%7Bm%3D1%7D%5E%7BM%7D%5Csum_%7Bj%3D1%7D%5E%7BJ%7D%20%5Cgamma_%7Bj%2Cm%7D%20*%20%5Cmathbb%7BI%7D%28x_i%20%5Cin%20R_%7Bj%2Cm%7D%29%5C%5C%20%26%5CRightarrow%20p_M%28y_i%3D1%7Cx_i%29%20%3D%20%5Cfrac%7B1%7D%7B1&plus;exp%28-f_M%28x%29%29%7D%20%5C%5C%20%5Cend%7Balign*%7D)  
 
+**Scikit-learn Application**
+> **GradientBoostingRegressor**:   
+****class**** sklearn.ensemble.GradientBoostingRegressor(loss=’ls’, learning_rate=0.1, n_estimators=100, subsample=1.0, criterion=’friedman_mse’, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_depth=3, min_impurity_decrease=0.0, min_impurity_split=None, init=None, random_state=None, max_features=None, alpha=0.9, verbose=0, max_leaf_nodes=None, warm_start=False, presort=’auto’, validation_fraction=0.1, n_iter_no_change=None, tol=0.0001)  
+
+  The base learners of GBR are regression trees, which are discussed in the CART decision tree document. Therefore only hyperparameters of GBR itself are introduced below. Please refer to the previous document for more information about CART decision tree parameters.
+
+- **loss** : {‘ls’, ‘lad’, ‘huber’, ‘quantile’}, optional (default=’ls’)  
+  loss function to be optimized. Default 'ls' refers to least squares regression, which is also used in our math derivation. Please refer to [Prince Grover](https://heartbeat.fritz.ai/5-regression-loss-functions-all-machine-learners-should-know-4fb140e9d4b0)'s blog for introduction of different loss functions. 
+
+- **learning_rate** : float, optional (default=0.1)  
+  Learning rate shrinks the contribution of each tree by learning_rate. Here we use the same example as AdaBoost, suppose previous prediction fm-1 = 1, learning rate = 0.1, and next tree correction = 0.5, then the updated prediction fm = 1 + 0.1 * 0.5 = 1.05. Lower learning rate sometimes makes the model generalize better, but also requires higher number of estimators.
+
+- **n_estimators** : int (default=100)  
+  Numbers of estimators in the model. It refers to M in the formular. Gradient boosting is fairly robust to over-fitting so a large number usually results in better performance.
+
+- **subsample** : loat, optional (default=1.0)
+  The fraction of samples to be randomely selected and used in each weak base learner. Subsample interacts with the parameter n_estimators. Choosing subsample < 1.0 leads to a reduction of variance and an increase in bias. Generally ~0.8 works fine. 
+
+- **init** : estimator or ‘zero’, optional (default=None)  
+  An estimator object to compute the initial predictions f0(x). If ‘zero’, the initial raw predictions are set to zero. By default a DummyEstimator is used, predicting either the average target value (for loss=’ls’), or a quantile for the other losses.
+
+- **alpha** : float (default=0.9)  
+  The alpha-quantile of the huber loss function and the quantile loss function. Only if loss='huber' or loss='quantile'.
+
+- **verbose** : int, default: 0
+  Enable verbose output. Default doesn't generate output. If 1 then it prints progress and performance once in a while (the more trees the lower the frequency). If greater than 1 then it prints progress and performance for every tree.
+
+- **warm_start** : bool, default: False  
+  When warm_start is true, the existing fitted model attributes are used to initialise the new model in a subsequent call to fit. In other words, we can add more trees on a trained model.
+
+- **validation_fraction** : float, optional, default 0.1  
+  The proportion of training data to set aside as validation set for early stopping. Must be between 0 and 1. Only used if n_iter_no_change is set to an integer.
+
+- **n_iter_no_change**  : int, default None  
+  n_iter_no_change is used to decide if early stopping will be used to terminate training when validation score is not improving. By default it is set to None to disable early stopping. If set to a number, it will set aside validation_fraction size of the training data as validation and terminate training when validation score is not improving in all of the previous n_iter_no_change numbers of iterations.
+
+- **tol**   : float, optional, default 1e-4  
+  Tolerance for the early stopping. When the loss is not improving by at least tol for n_iter_no_change iterations (if set to a number), the training stops.
+ 
+
+
 **Reference**  
 
 1. Friedman J H. Greedy function approximation: a gradient boosting machine[J]. Annals of statistics, 2001: 1189-1232.
@@ -163,3 +204,5 @@ AdaBoost uses exponential loss and the exponential loss grows exponentially for 
 8. https://medium.com/mlreview/gradient-boosting-from-scratch-1e317ae4587d
 9. https://zhuanlan.zhihu.com/p/38329631 [Chinese]
 10. https://zhuanlan.zhihu.com/p/43940320 [Chinese]
+11. https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingRegressor.html
+12. https://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/
