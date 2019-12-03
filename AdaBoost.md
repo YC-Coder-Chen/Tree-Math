@@ -71,10 +71,11 @@ Suppose that now we have finished m-1 iterations and successfully computed the f
   ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26%28%5Cbeta_%7Bm%7D%2C%20b_m%28x%29%29%20%3D%20%5Cunderset%7B%5Cbeta%20%2C%20b%28x%29%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20Loss%28y_i%2C%20f_%7Bm-1%7D%20&plus;%20%5Cbeta%20*%20b%28x_i%29%29%5C%5C%20%26%5CRightarrow%20%28%5Cbeta_%7Bm%7D%2C%20b_m%28x%29%29%20%3D%20%5Cunderset%7B%5Cbeta%20%2C%20b%28x%29%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20exp%28-y_i%20*%20f_%7Bm-1%7D%20-%20y_i%20*%20%5Cbeta%20*%20b%28x_i%29%20%29%5C%5C%20%26%5CRightarrow%20%28%5Cbeta_%7Bm%7D%2C%20b_m%28x%29%29%20%3D%20%5Cunderset%7B%5Cbeta%20%2C%20b%28x%29%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%20y_i%20*%20%5Cbeta%20*%20b%28x_i%29%20%29%20%5Cend%7Balign*%7D) 
 
   Where  
+  
+  ![img](https://latex.codecogs.com/svg.latex?%5Cbar%7Bw_%7Bmi%7D%7D%20%3D%20exp%28-y_i%20*%20f_%7Bm-1%7D%28x_i%29%29)      
 
-  ![img](https://latex.codecogs.com/svg.latex?%5Cbar%7Bw_%7Bmi%7D%7D%20%3D%20exp%28-y_i%20*%20f_%7Bm-1%7D%28x_i%29%29)  
-
-  *c.1. compute the optimal b_m(x)*
+  *c.1. compute the optimal b_m(x)*  
+  
   ![img](https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20%26%5Cunderset%7B%5Cbeta%20%7D%7Bargmin%7D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%20y_i%20*%20%5Cbeta%20*%20b%28x_i%29%29%20%5C%5C%20%26%5CRightarrow%20%5Cunderset%7B%5Cbeta%20%7D%7Bargmin%7D%20%28%5Csum_%7By%3Db%28x_i%29%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%5Cbeta%20%29%20&plus;%20%5Csum_%7By%5Cneq%20b%28x_i%29%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28%5Cbeta%20%29%29%20%5C%5C%20%26%5CRightarrow%20%5Cunderset%7B%5Cbeta%20%7D%7Bargmin%7D%20%28%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28%5Cbeta%20%29%20*%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29&plus;%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%5Cbeta%20%29%20*%20%5Cmathbb%7BI%7D%28y_i%20%3D%20b%28x_i%29%29%29%20%5C%5C%20%26%5CRightarrow%20%5Cunderset%7B%5Cbeta%20%7D%7Bargmin%7D%20%28%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28%5Cbeta%20%29%20*%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29&plus;%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%5Cbeta%20%29%20*%20%281%20-%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29%20%29%29%20%5C%5C%20%26%5CRightarrow%20%5Cunderset%7B%5Cbeta%20%7D%7Bargmin%7D%20%28%28exp%28%5Cbeta%29%20-%20exp%28-%5Cbeta%20%29%29%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20%5Cmathbb%7BI%7D%28y_i%5Cneq%20b%28x_i%29%29&plus;%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20%5Cbar%7Bw_%7Bmi%7D%7D%20*%20exp%28-%5Cbeta%20%29%29%20%5Cend%7Balign*%7D)  
 
   Since beta > 0, so we will have:  
