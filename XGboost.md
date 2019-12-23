@@ -37,7 +37,7 @@ The most important difference is that GBM only uses the first derivative informa
 
   ![img](https://latex.codecogs.com/svg.latex?Loss%28y_i%2C%20f_m%28x%29%29%20%3D%20%5Csum_%7Bi%3D1%7D%5E%7BN%7D%20Loss%28y_i%2C%20f_%7Bm-1%7D%28x%29%20&plus;%20G_m%28x%29%20&plus;%20%5COmega%20%28G_m%28x%29%29%29)  
 
-  where ![img](https://latex.codecogs.com/svg.latex?%5COmega%20%28G_m%28x%29%29) is a regulization term, J is how many final leaf nodes are in the base learner ![img](https://latex.codecogs.com/svg.latex?G_m%28x%29), b_j is the output value at each final leaf node:  
+  where ![img](https://latex.codecogs.com/svg.latex?%5COmega%20%28G_m%28x%29%29) is defined as below. It's a regulization term, J is how many final leaf nodes are in the base learner ![img](https://latex.codecogs.com/svg.latex?G_m%28x%29), b_j is the output value at each final leaf node:  
 
   ![img](https://latex.codecogs.com/svg.latex?%5COmega%20%28G_m%28x%29%29%20%3D%20%5Cgamma%20*%20J%20&plus;%20%5Cfrac%7B1%7D%7B2%7D%20*%20%5Clambda%20%5Csum_%7Bj%3D1%7D%5E%7BJ%7D%20b_j%5E2)  
 
