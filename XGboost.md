@@ -150,6 +150,38 @@ We use regression tree as the example.
   
   Here we won't introduce much of the rest system design, because these are more related to CS domain.  
 
+**XGBoost Application**  
+> **XGBRegressor**:   
+****class**** xgboost.XGBRegressor(max_depth=3, learning_rate=0.1, n_estimators=100, verbosity=1, objective='reg:squarederror', booster='gbtree', tree_method='auto', n_jobs=1, gamma=0, min_child_weight=1, max_delta_step=0, subsample=1, colsample_bytree=1, colsample_bylevel=1, colsample_bynode=1, reg_alpha=0, reg_lambda=1, scale_pos_weight=1, base_score=0.5, random_state=0, missing=None, num_parallel_tree=1, importance_type='gain', **kwargs)
+
+- **max_depth** : int, optional (default=6)   
+  The maximum depth of base tree learners, i.e. Gm(x). This parameter is used to control overfitting and should be tuned using cross validation.
+
+- **learning_rate** : float, optional (default=0.1)  
+  Stepsize shrinkage used to prevent overfitting, same as AdaBoost and GBM.
+
+- **n_estimators** : int, optional (default=100)  
+  The maximum number of trees to fit. It corresponds to M in the formula.
+
+- **objective** : string, optional (default='reg:squarederror')  
+  It specifies the learning task and related learning objective. Represents the loss function to be minimized in the formula. For classification problems (XGBClassifier), possible objectives are 'binary:logistic', 'multi:softmax', 'multi:softprob'. 
+
+- **booster** : string, optional (default='gbtree')  
+  It specifies which booster to use in every iteration. 'gbtree' and 'dart' are tree-based models. 'gblinear' is linear models. Please refer to [here](https://xgboost.readthedocs.io/en/latest/tutorials/dart.html) for more info about DART booster. Basically it randomly dropout some learners to prevent overfitting and achieve better results in some situations. 
+
+- **tree_method** : string, optional (default='auto')  
+  It determines the tree construction algorithm used in finding the best split in every iteration. Possible choices are 'auto', 'exact', 'approx', 'hist', 'gpu_hist'. As introduced above, 'exact' refers to method 1: Exactly Greedy Algorithm, 'approx' refers to method 2: Approximate Algorithm, ''. 
+
+
+
+
+
+
+
+
+
+
+
 **Reference**  
 
 1. Chen T, Guestrin C. Xgboost: A scalable tree boosting system[C]//Proceedings of the 22nd acm sigkdd international conference on knowledge discovery and data mining. ACM, 2016: 785-794.
@@ -159,3 +191,6 @@ We use regression tree as the example.
 5. https://towardsdatascience.com/xgboost-mathematics-explained-58262530904a
 6. https://zhuanlan.zhihu.com/p/46683728 [Chinese]
 7. https://zhuanlan.zhihu.com/p/40129825 [Chinese]
+8. https://xgboost.readthedocs.io/en/latest/parameter.html 
+9. https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/ 
+10. https://xgboost.readthedocs.io/en/latest/python/python_api.html
