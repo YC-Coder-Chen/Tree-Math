@@ -8,7 +8,7 @@ Boosted Decision Tree
 ------------
 **Adaptive Boosting (AdaBoost)**
 > One Sentence Summary:   
-Continuously adding weak base learners to the existing model and adaptively adjusting the weight for weak base learnings.
+Continuously adding weak base learners to the existing model and adaptively adjusting the weight for weak base learners.
 
 - **a. What is Forward Stagewise Additive Modeling**  
 Suppose b(x;rm) is a base learning controlled by parameter rm.  
