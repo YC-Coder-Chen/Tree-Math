@@ -4,7 +4,7 @@ Machine learning study notes, contains Math behind all the mainstream tree-based
 
 
 
-Decision Tree
+Base Decision Tree
 ------------
 **ID3 Model**
 > One Sentence Summary:   

@@ -4,7 +4,7 @@ Machine learning study notes, contains Math behind all the mainstream tree-based
 
 
 
-Boosted Decision Tree
+Boosting Tree Models
 ------------
 **GBM (Gradient Boosting Machine)**
 
