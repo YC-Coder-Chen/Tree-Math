@@ -170,16 +170,6 @@ We use regression tree as the example.
 - **tree_method** : string, optional (default='auto')  
   It determines the tree construction algorithm used in finding the best split in every iteration. Possible choices are 'auto', 'exact', 'approx', 'hist', 'gpu_hist'. As introduced above, 'exact' refers to method 1: Exactly Greedy Algorithm, 'approx' refers to method 2: Approximate Algorithm, ''. 
 
-
-
-
-
-
-
-
-
-
-
 **Reference**  
 
 1. Chen T, Guestrin C. Xgboost: A scalable tree boosting system[C]//Proceedings of the 22nd acm sigkdd international conference on knowledge discovery and data mining. ACM, 2016: 785-794.
@@ -191,4 +181,4 @@ We use regression tree as the example.
 7. https://zhuanlan.zhihu.com/p/40129825 [Chinese]
 8. https://xgboost.readthedocs.io/en/latest/parameter.html 
 9. https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/ 
-10. https://xgboost.readthedocs.io/en/latest/python/python_api.html
+10. https://xgboost.readthedocs.io/en/latest/python/python_api.html  
