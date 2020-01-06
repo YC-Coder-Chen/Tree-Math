@@ -197,6 +197,10 @@ We use regression tree as the example.
 
     These three parameters work cumulatively. Suppose we have 64 features, and the combination is {Colsample_bytree=0.5, Colsample_bylevel=0.5, Colsample_bynode=0.5}. Then the process of randomly selecting features goes like this:
 
+    ![img](./source_photo/xgboost_subsample1.jpg)
+    ![img](./source_photo/xgboost_subsample2.jpg)
+
+
 - **reg_alpha** : float, (default=0)  
   L1 regularization term on weights. Increasing this value will make model more conservative.
 
