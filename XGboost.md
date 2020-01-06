@@ -100,7 +100,7 @@ We use regression tree as the example.
 - **d. More details on how to find the best split inside each base learner**  
   XGboost offers four split find algorithms to find each split at each base learners.  
 
-  - Method One: Exactly Greedy Algorithm
+  - **Method One: Exactly Greedy Algorithm**
 
     In each split of each base learner, our gain is as below:  
 
@@ -110,7 +110,7 @@ We use regression tree as the example.
 
     ![img](./source_photo/xgboost_exact_greedy.jpg)    
 
-  - Method Two: Approximate Algorithm using Weighted Quantile Sketch
+  - **Method Two: Approximate Algorithm using Weighted Quantile Sketch**
 
     The above the exact greedy algorithm operates too slow when we have a large dataset. Because we need to go through every possible feature and split points then compute the gain for each combination. Suppose there are k features and n samples, then we have to compute around k*(n-1) times of gain.  So we can improve this by splitting on predefined percentile buckets instead of every possible data points.  
 
@@ -132,7 +132,7 @@ We use regression tree as the example.
 
     ![img](./source_photo/xgboost_approximate.jpg)   
 
-  - Method Three: Sparsity-aware Split Finding  
+  - **Method Three: Sparsity-aware Split Finding**  
 
     Most of the tree algorithms before XGboost cannot handle the dataset with missing values. So we need to spend a lot of time filling missing values then feed the dataset into machine learning models. But XGboost uses one simple idea to provide sparsity support: only collect statistics of non-missing samples during creating buckets & split points, then check putting samples with missing value into which side of the tree would give us the maximal gain. Below is the pseudo code of this algorithm in [the original paper](https://arxiv.org/pdf/1603.02754.pdf).  
 
@@ -152,23 +152,79 @@ We use regression tree as the example.
 > **XGBRegressor**:   
 ****class**** xgboost.XGBRegressor(max_depth=3, learning_rate=0.1, n_estimators=100, verbosity=1, objective='reg:squarederror', booster='gbtree', tree_method='auto', n_jobs=1, gamma=0, min_child_weight=1, max_delta_step=0, subsample=1, colsample_bytree=1, colsample_bylevel=1, colsample_bynode=1, reg_alpha=0, reg_lambda=1, scale_pos_weight=1, base_score=0.5, random_state=0, missing=None, num_parallel_tree=1, importance_type='gain', **kwargs)
 
-- **max_depth** : int, optional (default=6)   
+- **max_depth** : int, (default=6)   
   The maximum depth of base tree learners, i.e. Gm(x). This parameter is used to control overfitting and should be tuned using cross validation.
 
-- **learning_rate** : float, optional (default=0.1)  
+- **learning_rate** : float, (default=0.1)  
   Stepsize shrinkage used to prevent overfitting, same as AdaBoost and GBM.
 
-- **n_estimators** : int, optional (default=100)  
+- **n_estimators** : int, (default=100)  
   The maximum number of trees to fit. It corresponds to M in the formula.
 
-- **objective** : string, optional (default='reg:squarederror')  
+- **objective** : string, (default='reg:squarederror')  
   It specifies the learning task and related learning objective. Represents the loss function to be minimized in the formula. For classification problems (XGBClassifier), possible objectives are 'binary:logistic', 'multi:softmax', 'multi:softprob'. 
 
-- **booster** : string, optional (default='gbtree')  
+- **booster** : string, (default='gbtree')  
   It specifies which booster to use in every iteration. 'gbtree' and 'dart' are tree-based models. 'gblinear' is linear models. Please refer to [here](https://xgboost.readthedocs.io/en/latest/tutorials/dart.html) for more info about DART booster. Basically it randomly dropout some learners to prevent overfitting and achieve better results in some situations. 
 
-- **tree_method** : string, optional (default='auto')  
-  It determines the tree construction algorithm used in finding the best split in every iteration. Possible choices are 'auto', 'exact', 'approx', 'hist', 'gpu_hist'. As introduced above, 'exact' refers to method 1: Exactly Greedy Algorithm, 'approx' refers to method 2: Approximate Algorithm, ''. 
+- **tree_method** : string, (default='auto')  
+  It determines the tree construction algorithm used in finding the best split in every iteration. Possible choices are 'auto', 'exact', 'approx', 'hist', 'gpu_hist'. As introduced above, 'exact' refers to method 1: Exactly Greedy Algorithm, 'approx' refers to method 2: Approximate Algorithm, 'hist' refers to Fast histogram optimized approximate greedy algorithm, 'gpu_hist' is a GPU_implementation of hist algorithm, and 'auto' uses heuristic method to choose the fastest method. In this article, we only introduce 'exact' and 'approx', and you can refer to LightGBM for more info on 'hist'. 
+
+- **n_jobs** : int, (default=1)  
+  The number of parallel threads used to run XGBoost. You could tune this parameter to efficiently use all your CPU cores and improve training process. Here is [an blog introducing how to tune multithreading support in python](https://machinelearningmastery.com/best-tune-multithreading-support-xgboost-python/).
+  
+- **gamma** : float, (default=0)  
+  Gamma specifies the minimum loss reduction required to make a split. In the splitting algorithm, a leaf node will be split only when the resulting split gives a loss reduction larger than gamma. Larger gamma value makes the model more conservative by requiring higher loss reduction. It could be tuned using CV.
+
+- **min_child_weight** : int, (default=1)  
+  Minimum sum of weights(hessian) of all observations in a child. It's very similar to 'min_sample_leaf' in the CART decision tree except that it uses the sum of weights instead of the sum of instances number. Therefore this parameter is also used to control overfitting and could be tuned using CV. To better understand how it works, you could [read this answer](https://stats.stackexchange.com/questions/317073/explanation-of-min-child-weight-in-xgboost-algorithm/323459).
+
+- **max_delta_step** : int, (default=0)  
+  Maximum delta step we allow each tree’s weight estimation to be. If the value is set to 0, it means there is no constraint. If it is set to a positive value, it can help making the update step more conservative. Usually this parameter is not needed, but it might help in logistic regression when class is extremely imbalanced. Set it to value of 1-10 might help control the update. [More explanation could be found here](https://stats.stackexchange.com/questions/233248/max-delta-step-in-xgboost).
+
+
+- **subsample** : float, (default=1.0)  
+  Subsample ratio of the training instances. Setting it to 0.5 means that XGBoost would randomly sample half of the training data prior to growing trees. It works very similar to subsample in GBM. 
+
+- **colsample_bytree, colsample_bylevel, colsample_bynode** : float, (defualt=1.0)   
+  This is a family of parameters for subsampling of columns.  
+
+   **Colsample_bytree** is similar to max_features in CART decision tree. It denotes the subsample ratio of columns when constructing each tree. Say if we set Colsample_bytree as 0.8 and we have 10 features in total. Then when constructing each tree, only eight features will be randomly selected and best feature will be picked among the selected eight.
+
+    **Colsample_bylevel** is the subsample ratio of columns for each level. Subsampling occurs once for every new depth level reached in a tree. Columns are subsampled from the set of columns chosen for the current tree.  
+
+    **Colsample_bynode** is the subsample ratio of columns for each node (split). Subsampling occurs once every time a new split is evaluated. Columns are subsampled from the set of columns chosen for the current level.
+
+    These three parameters work cumulatively. Suppose we have 64 features, and the combination is {Colsample_bytree=0.5, Colsample_bylevel=0.5, Colsample_bynode=0.5}. Then the process of randomly selecting features goes like this:
+
+- **reg_alpha** : float, (default=0)  
+  L1 regularization term on weights. Increasing this value will make model more conservative.
+
+- **reg_lambda** : float, (default=1)  
+  L2 regularization term on weights. Increasing this value will make model more conservative. 
+
+- **scale_pos_weight** ：float, (default=1)  
+  Control the balance of positive and negative weights, useful for unbalanced classes. A typical value to consider: sum(negative instances) / sum(positive instances). See [this article for more information](https://xgboost.readthedocs.io/en/latest/tutorials/param_tuning.html). 
+
+- **base_score** : float, (default=0.5)  
+  The initial prediction score of all instances, global bias. Theoretically, base_score won't affect the final result as long as you have appropriate learning rate and enough learning steps. [See the developer's answer here](https://github.com/dmlc/xgboost/issues/799).
+
+- **missing** : float, optional (default=None)
+  Value in the data which needs to be present as a missing value. If None, defaults to np.nan
+
+- **num_parallel_tree** : int, (default=1)
+  Number of parallel trees constructed during each iteration. Used for boosting random forest.
+
+- **importance_type** : string, (default='gain')  
+  The feature importance type for the feature_importances_ property: either “gain”, “weight”, “cover”, “total_gain” or “total_cover”. It is defined only when decision tree model (gbtree) is chosed as the base learner. See [this article for more info about different types of importance](https://towardsdatascience.com/be-careful-when-interpreting-your-features-importance-in-xgboost-6e16132588e7). 
+
+    **'weight'**: the number of times a feature is used to split the data across all trees.  
+    **'gain'**: the average gain across all splits the feature is used in.  
+    **'cover'**: the average coverage across all splits the feature is used in.  
+    **'total_gain'**: the total gain across all splits the feature is used in.  
+    **'total_cover'**:  the total coverage across all splits the feature is used in.
+
+
 
 **Reference**  
 
@@ -182,3 +238,5 @@ We use regression tree as the example.
 8. https://xgboost.readthedocs.io/en/latest/parameter.html 
 9. https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/ 
 10. https://xgboost.readthedocs.io/en/latest/python/python_api.html  
+11. https://xgboost.readthedocs.io/en/latest/tutorials/param_tuning.html 
+12. https://github.com/dmlc/xgboost/blob/master/doc/parameter.rst
