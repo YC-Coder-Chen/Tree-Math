@@ -89,7 +89,7 @@ During each split, we find the feature that gives the dataset the minimum Gini i
   
 
 - **max_features** : int, float, string or None, optional (default=None)  
-  max_features represents the number of features to consider when looking for the best split. For example, if you set max_feature at 10, then at each splitting, the algorithm will randomly select 10 features and search for the best one out of the ten features. Note that sometimes the search will exceed the max_features if the algorithm cannot find a valid partition of node samples in the first search. Similar to min_sample_split, values for this hyperparameter could be int or float or {'auto','sqrt','log2','none'}, please refer to the official document for more explanation. There is also an article introducing how to pick the max_features in decision tree and random forests.
+  max_features represents the number of features to consider when looking for the best split. For example, if you set max_feature at 10, then at each splitting, the algorithm will randomly select 10 features and search for the best one out of the ten features. Note that sometimes the search will exceed the max_features if the algorithm cannot find a valid partition of node samples in the first search. Similar to min_sample_split, values for this hyperparameter could be int or float or {'auto','sqrt','log2','none'}, please refer to the official document for more explanation. There is also [an article introducing how to pick the max_features in decision tree and random forests](https://stats.stackexchange.com/questions/324370/references-on-number-of-features-to-use-in-random-forest-regression).
 
 - **max_leaf_nodes** : int or None, optional (default=None)    
   Grow a tree with max_leaf_nodes in best-first fashion. Please refer to the introduction of lightGMB for difference between level-wise tree and leaf-wise tree (best-first search algorithm).
@@ -124,6 +124,5 @@ During each split, we find the feature that gives the dataset the minimum Gini i
 7. https://stackoverflow.com/questions/46756606/what-does-splitter-attribute-in-sklearns-decisiontreeclassifier-do 
 8. https://medium.com/@mohtedibf/indepth-parameter-tuning-for-decision-tree-6753118a03c3
 9. https://discuss.analyticsvidhya.com/t/what-does-min-samples-split-means-in-decision-tree/6233/2
-10. **How to set max_features**: https://stats.stackexchange.com/questions/324370/references-on-number-of-features-to-use-in-random-forest-regression 
-11. https://medium.com/datadriveninvestor/decision-tree-adventures-2-explanation-of-decision-tree-classifier-parameters-84776f39a28
-12. https://towardsdatascience.com/scikit-learn-decision-trees-explained-803f3812290d 
+10. https://medium.com/datadriveninvestor/decision-tree-adventures-2-explanation-of-decision-tree-classifier-parameters-84776f39a28
+11. https://towardsdatascience.com/scikit-learn-decision-trees-explained-803f3812290d 

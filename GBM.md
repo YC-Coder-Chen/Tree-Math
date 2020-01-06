@@ -164,7 +164,7 @@ AdaBoost uses exponential loss and the exponential loss grows exponentially for 
 - **n_estimators** : int (default=100)  
   Numbers of estimators in the model. It refers to M in the formular. Gradient boosting is fairly robust to over-fitting so a large number usually results in better performance.
 
-- **subsample** : loat, optional (default=1.0)  
+- **subsample** : float, optional (default=1.0)  
   The fraction of samples to be randomely selected and used in each weak base learner. Subsample interacts with the parameter n_estimators. Choosing subsample < 1.0 leads to a reduction of variance and an increase in bias. Generally ~0.8 works fine. 
 
 - **init** : estimator or ‘zero’, optional (default=None)  
