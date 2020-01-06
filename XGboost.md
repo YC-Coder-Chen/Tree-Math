@@ -156,31 +156,31 @@ We use regression tree as the example.
   The maximum depth of base tree learners, i.e. Gm(x). This parameter is used to control overfitting and should be tuned using cross validation.
 
 - **learning_rate** : float, (default=0.1)  
-  Stepsize shrinkage used to prevent overfitting, same as AdaBoost and GBM.
+  Stepsize shrinkage used to prevent overfitting, the same as AdaBoost and GBM.
 
 - **n_estimators** : int, (default=100)  
   The maximum number of trees to fit. It corresponds to M in the formula.
 
 - **objective** : string, (default='reg:squarederror')  
-  It specifies the learning task and related learning objective. Represents the loss function to be minimized in the formula. For classification problems (XGBClassifier), possible objectives are 'binary:logistic', 'multi:softmax', 'multi:softprob'. 
+  It specifies the learning task and the related learning objective. Represents the loss function to be minimized in the formula. For classification problems (XGBClassifier), possible objectives are 'binary:logistic', 'multi:softmax', 'multi:softprob'. 
 
 - **booster** : string, (default='gbtree')  
-  It specifies which booster to use in every iteration. 'gbtree' and 'dart' are tree-based models. 'gblinear' is linear models. Please refer to [here](https://xgboost.readthedocs.io/en/latest/tutorials/dart.html) for more info about DART booster. Basically it randomly dropout some learners to prevent overfitting and achieve better results in some situations. 
+  It specifies which booster to use in every iteration. 'gbtree' and 'dart' are tree-based models. 'gblinear' is linear models. Please refer to [here](https://xgboost.readthedocs.io/en/latest/tutorials/dart.html) for more info about DART booster. Basically it randomly drops out some learners to prevent overfitting and therefore achieves better results in some situations. 
 
 - **tree_method** : string, (default='auto')  
   It determines the tree construction algorithm used in finding the best split in every iteration. Possible choices are 'auto', 'exact', 'approx', 'hist', 'gpu_hist'. As introduced above, 'exact' refers to method 1: Exactly Greedy Algorithm, 'approx' refers to method 2: Approximate Algorithm, 'hist' refers to Fast histogram optimized approximate greedy algorithm, 'gpu_hist' is a GPU_implementation of hist algorithm, and 'auto' uses heuristic method to choose the fastest method. In this article, we only introduce 'exact' and 'approx', and you can refer to LightGBM for more info on 'hist'. 
 
 - **n_jobs** : int, (default=1)  
-  The number of parallel threads used to run XGBoost. You could tune this parameter to efficiently use all your CPU cores and improve training process. Here is [an blog introducing how to tune multithreading support in python](https://machinelearningmastery.com/best-tune-multithreading-support-xgboost-python/).
+  The number of parallel threads used to run XGBoost. You could tune this parameter to efficiently use all your CPU cores and improve the training process. Here is [a blog introducing how to tune multithreading support in python](https://machinelearningmastery.com/best-tune-multithreading-support-xgboost-python/).
   
 - **gamma** : float, (default=0)  
   Gamma specifies the minimum loss reduction required to make a split. In the splitting algorithm, a leaf node will be split only when the resulting split gives a loss reduction larger than gamma. Larger gamma value makes the model more conservative by requiring higher loss reduction. It could be tuned using CV.
 
 - **min_child_weight** : int, (default=1)  
-  Minimum sum of weights(hessian) of all observations in a child. It's very similar to 'min_sample_leaf' in the CART decision tree except that it uses the sum of weights instead of the sum of instances number. Therefore this parameter is also used to control overfitting and could be tuned using CV. To better understand how it works, you could [read this answer](https://stats.stackexchange.com/questions/317073/explanation-of-min-child-weight-in-xgboost-algorithm/323459).
+  The minimum sum of weights(hessian) of all observations in a child. It's very similar to 'min_sample_leaf' in the CART decision tree except that it uses the sum of weights instead of the sum of instances number. Therefore this parameter is also used to control overfitting and could be tuned using CV. To better understand how it works, you could [read this answer](https://stats.stackexchange.com/questions/317073/explanation-of-min-child-weight-in-xgboost-algorithm/323459).
 
 - **max_delta_step** : int, (default=0)  
-  Maximum delta step we allow each tree’s weight estimation to be. If the value is set to 0, it means there is no constraint. If it is set to a positive value, it can help making the update step more conservative. Usually this parameter is not needed, but it might help in logistic regression when class is extremely imbalanced. Set it to value of 1-10 might help control the update. [More explanation could be found here](https://stats.stackexchange.com/questions/233248/max-delta-step-in-xgboost).
+  Maximum delta step we allow each tree’s weight estimation to be. If the value is set to 0, it means there is no constraint. If it is set to a positive value, it can help making the update step more conservative. Usually, this parameter is not needed, but it might help in logistic regression when class is extremely imbalanced. Set it to value of 1-10 might help control the update. [More explanation could be found here](https://stats.stackexchange.com/questions/233248/max-delta-step-in-xgboost).
 
 
 - **subsample** : float, (default=1.0)  
@@ -189,7 +189,7 @@ We use regression tree as the example.
 - **colsample_bytree, colsample_bylevel, colsample_bynode** : float, (defualt=1.0)   
   This is a family of parameters for subsampling of columns.  
 
-   **Colsample_bytree** is similar to max_features in CART decision tree. It denotes the subsample ratio of columns when constructing each tree. Say if we set Colsample_bytree as 0.8 and we have 10 features in total. Then when constructing each tree, only eight features will be randomly selected and best feature will be picked among the selected eight.
+   **Colsample_bytree** is similar to max_features in the CART decision tree. It denotes the subsample ratio of columns when constructing each tree. Say if we set Colsample_bytree as 0.8 and we have 10 features in total. Then when constructing each tree, only eight features will be randomly selected and the best feature will be picked among the selected eight.
 
     **Colsample_bylevel** is the subsample ratio of columns for each level. Subsampling occurs once for every new depth level reached in a tree. Columns are subsampled from the set of columns chosen for the current tree.  
 
